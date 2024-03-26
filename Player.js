@@ -3,8 +3,8 @@ import Camera from './Camera.js';
 
 export default class Player {
 
-    collectionsMenu;
-    camera;
+    collectionsMenu; //Collections Menu
+    camera; //Camera Type
 
     constructor(){
         this.collectionsMenu = new CollectionsMenu();
@@ -12,6 +12,6 @@ export default class Player {
     }
 
     viewCollections(){
-        return 0;
+
     }
 }
