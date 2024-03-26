@@ -1,13 +1,14 @@
 import CollectionsMenu from './CollectionsMenu.js';
+import Camera from './Camera.js';
 
 export default class Player {
 
     collectionsMenu;
     camera;
 
-    constructor(collectionsMenu, camera){
-        this.collectionsMenu = collectionsMenu;
-        this.camera = camera;
+    constructor(){
+        this.collectionsMenu = new CollectionsMenu();
+        this.camera = new Camera();
     }
 
     viewCollections(){
