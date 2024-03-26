@@ -5,11 +5,11 @@ export default class BirdCollection{
     birds = []; //array of type Bird
 
     constructor(){
-        return null;
+
     }
 
     updateBirdCollection(bird){
-        this.birds.add 
+        this.birds.push(bird);
     }
 
 }
