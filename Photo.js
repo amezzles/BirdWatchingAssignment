@@ -1,12 +1,14 @@
-import Bird from 'Bird.js';
+import Bird from './Bird.js';
 
 export default class Photo {
 
-    birdInFrame; //Bird
+    birdInFrame; //Bird type
 
-    Photo(birdInFrame) {
+    constructor(birdInFrame) {
         this.birdInFrame = birdInFrame;
     }
 
-
+    getBirdInFrame(){
+        return this.birdInFrame;
+    }
 }

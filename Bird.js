@@ -1,13 +1,15 @@
 
 export default class Bird {
 
-    birdType;
-    position;
+    birdType; //String
+    positionX; //int
+    positionY; //int
 
-    Bird(birdType, position) {
+    constructor(birdType, positionX, positionY) {
         this.birdType = birdType;
-        this.position = position;
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
-    
+
 }
