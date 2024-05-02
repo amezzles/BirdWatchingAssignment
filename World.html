@@ -55,8 +55,12 @@
 
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.outputEncoding = THREE.sRGBEncoding;
+		renderer.outputEncoding = THREE.LinearEncoding;
+		renderer.gammaOutput = true;  // Ensures that the output colors are gamma corrected.
+		renderer.gammaFactor = 2.2;
+		renderer.physicallyCorrectLights = true;
 		document.body.appendChild(renderer.domElement);
+		
 
 		// Lighting
 		var ambientLight = new THREE.AmbientLight(0xffffcc, 0.5); // Increased ambient light
@@ -90,6 +94,11 @@
 		mtlLoader.load('tree_blender_file.mtl', function (materials) {
 			console.log("Materials loaded", materials);
 			materials.preload();
+			for (const material of Object.values(materials.materials)) {
+				material.needsUpdate = true; // Force updating materials
+				// Adjust specific properties as needed
+				material.specular = new THREE.Color(0x222222); // Dim the specular highlights
+			}
 			var objLoader = new OBJLoader();
 			objLoader.setMaterials(materials);
 			objLoader.setPath('Assets/');
