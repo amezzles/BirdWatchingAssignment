@@ -116,6 +116,19 @@
 			camera.updateProjectionMatrix();
 		}
 
+		const fpControls = new FirstPersonControls(camera, renderer.domElement);
+		fpControls.movementSpeed = 1; // Set the movement speed as needed
+		fpControls.lookSpeed = 0.1; // Set the look speed as needed
+
+		function animate() {
+			requestAnimationFrame(animate);
+			fpControls.update(0.05); // Adjust the update rate for smooth animation
+
+			renderer.render(scene, camera);
+		}
+
+		animate();
+
 		window.addEventListener('resize', onResize);
 
 		function updateLoop() {
@@ -125,16 +138,6 @@
 
 		requestAnimationFrame(updateLoop);
 
-      const fpControls = new FirstPersonControls(camera, renderer.domElement);
-
-      function animate() {
-        requestAnimationFrame(animate);
-
-        fpControls.update(1.0); //time step value
-        //lower no. = slower, higher no. = faster
-
-        renderer.render(scene, camera);
-      }
     </script>
   </body>
 </html>
