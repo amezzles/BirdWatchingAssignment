@@ -78,7 +78,7 @@
 
 	  	function addTree(originalObject) {
 			var tree = originalObject.clone();
-			var posX = Math.random() * 40 - 20;
+			var posX = Math.random() * 100 - 50;
 			var posY = 0;
 			var posZ = -10;
 			tree.position.set(posX, posY, posZ);
@@ -104,7 +104,7 @@
 			objLoader.setPath('Assets/');
 			objLoader.load('tree_blender_file.obj', function (originalObject) {
 			console.log("Object loaded", originalObject);
-			for (var i = 0; i < 20; i++) {
+			for (var i = 0; i < 40; i++) {
 				addTree(originalObject);
 			}
 			});
