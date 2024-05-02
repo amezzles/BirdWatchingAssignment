@@ -48,8 +48,9 @@
 
       var ratio = window.innerWidth / window.innerHeight;
       var camera = new THREE.PerspectiveCamera(45, ratio, 0.1, 1000);
-      camera.position.set(0, 0, 15);
-      camera.lookAt(scene.position); // Ensure the camera looks at the scene
+      camera.position.set(1, 10, 30);
+	  var lookAtPosition = new THREE.Vector3(scene.position.x, scene.position.y + 10, scene.position.z);
+      camera.lookAt(lookAtPosition);
 
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
