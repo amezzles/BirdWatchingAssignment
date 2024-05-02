@@ -39,10 +39,10 @@
     </script>
 
     <script type="module">
-		
-		import * as THREE from 'three';
-		import { MTLLoader } from './jsm/loaders/MTLLoader.js';
-		import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+      import * as THREE from 'three';
+      import { MTLLoader } from './jsm/loaders/MTLLoader.js';
+      import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+      import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js';
 
 		var scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x8FBCD4); // Light blue background to help visualize camera placement
@@ -116,6 +116,16 @@
 
 		requestAnimationFrame(updateLoop);
 
+      const fpControls = new FirstPersonControls(camera, renderer.domElement);
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        fpControls.update(1.0); //time step value
+        //lower no. = slower, higher no. = faster
+
+        renderer.render(scene, camera);
+      }
     </script>
   </body>
 </html>
