@@ -58,10 +58,10 @@
       document.body.appendChild(renderer.domElement);
 
       // Lighting
-      var ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Increased ambient light
+      var ambientLight = new THREE.AmbientLight(0xffffcc, 0.5); // Increased ambient light
       scene.add(ambientLight);
 
-      var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Stronger directional light
+      var directionalLight = new THREE.DirectionalLight(0xffffcc, 0.8); // Stronger directional light
       directionalLight.position.set(0, 10, 10);
       scene.add(directionalLight);
 
@@ -73,23 +73,71 @@
       requestAnimationFrame(updateLoop);
 
       var mtlLoader = new MTLLoader();
-      mtlLoader.setPath('Assets/');
-      mtlLoader.load('tree_blender_file.mtl', function (materials) {
-        console.log("Materials loaded", materials);
-        materials.preload();
-        var objLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.setPath('Assets/');
-        objLoader.load('tree_blender_file.obj', function (object) {
-          console.log("Object loaded", object);
-          scene.add(object);
-          object.position.set(0, 0, 0); // Center the object
-        }, undefined, function (error) {
-          console.error("An error happened during the object loading", error);
-        });
-      }, undefined, function (error) {
-        console.error("An error happened during the materials loading", error);
-      });
+		mtlLoader.setPath('Assets/');
+		mtlLoader.load('tree_blender_file.mtl', function (materials) {
+			console.log("Materials loaded", materials);
+			materials.preload();
+			var objLoader = new OBJLoader();
+			objLoader.setMaterials(materials);
+			objLoader.setPath('Assets/');
+			objLoader.load('tree_blender_file.obj', function (originalObject) {
+				console.log("Object loaded", originalObject);
+
+				// Add trees
+				addTree(originalObject);
+
+			}, undefined, function (error) {
+				console.error("An error happened during the object loading", error);
+			});
+		}, undefined, function (error) {
+			console.error("An error happened during the materials loading", error);
+		});
+
+		// Function to add a tree at a random position, rotation, and size
+		function addTree(originalObject) {
+			var tree = originalObject.clone();  // Clone the original object
+
+			// Randomize position
+			var posX = Math.random() * 40 - 20;  // Random x position between -10 and 10
+			var posY = 0; // Assuming trees are placed on the ground
+			var posZ = -10;  // Random z position between -10 and 10
+			tree.position.set(posX, posY, posZ);
+
+			// Randomize rotation
+			var rotY = Math.random() * Math.PI * 2; // Random rotation around y-axis (in radians)
+			tree.rotation.set(0, rotY, 0);
+
+			// Randomize size
+			var scale = Math.random() * 1 + 0.3; // Random scale between 0.5 and 2
+			tree.scale.set(scale, scale, scale);
+
+			scene.add(tree);
+		}
+
+
+		// Load the tree object
+		var mtlLoader = new MTLLoader();
+		mtlLoader.setPath('Assets/');
+		mtlLoader.load('tree_blender_file.mtl', function (materials) {
+		console.log("Materials loaded", materials);
+		materials.preload();
+		var objLoader = new OBJLoader();
+		objLoader.setMaterials(materials);
+		objLoader.setPath('Assets/');
+		objLoader.load('tree_blender_file.obj', function (originalObject) {
+			console.log("Object loaded", originalObject);
+
+			// Add multiple trees with random properties
+			for (var i = 0; i < 20; i++) {
+			addTree(originalObject);
+			}
+
+		}, undefined, function (error) {
+			console.error("An error happened during the object loading", error);
+		});
+		}, undefined, function (error) {
+		console.error("An error happened during the materials loading", error);
+		});
 
       function onResize() {
         var width = window.innerWidth;
@@ -97,9 +145,10 @@
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
-      }
+      };
 
       window.addEventListener('resize', onResize);
+
     </script>
   </body>
 </html>
