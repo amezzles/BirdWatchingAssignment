@@ -151,7 +151,11 @@
 					grassModels.push(grass);
 					loadTreeModel('Assets/', 'grass2_.mtl', 'grass2_.obj', function (grass) {
 						grassModels.push(grass);
-						populateScene(); // Call the function after loading all models
+						loadTreeModel('Assets/', 'leaf_pile.mtl', 'leaf_pile.obj', function (grass) {
+							grassModels.push(grass);
+							grass.name = 'leaf pile';
+							populateScene(); // Call the function after loading all models
+						});
 					});
 				});
 			});
@@ -200,9 +204,13 @@
 			if (originalObject.name === "tree2") {
 				// Specific tree model that needs a scale of 2
 				scale = 4;
-			} else {
+			} 
+			else if (originalObject.name === "leaf pile") {
+				scale = 3;
+			}
+			else {
 				// Other models
-				scale = Math.random() * 0.5 + 0.5 * scaleFactor;
+				scale = (Math.random() * 0.5 + 0.5) * scaleFactor;
 			}
 
 			obj.scale.set(scale, scale, scale);
@@ -216,12 +224,12 @@
 		function populateScene() {
 			// Add trees (further away)
 			for (var i = 0; i < 500; i++) {
-				addObject(treeModels, 50, 200, 10);
+				addObject(treeModels, 60, 200, 10);
 			}
 
 			// Add grass (closer)
 			for (var i = 0; i < 800; i++) {
-				addObject(grassModels, 10, 100, 2, 20);
+				addObject(grassModels, 10, 200, 2, 20);
 			}
 		}
 
