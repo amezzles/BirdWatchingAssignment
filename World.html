@@ -60,22 +60,30 @@
 		renderer.physicallyCorrectLights = true;
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		renderer.toneMappingExposure = 1.0; // Adjust as needed
+		
+		//renderer.shadowMap.enabled = true;
+		//renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+
 		document.body.appendChild(renderer.domElement);
 
 		// Lighting
-		var ambientLight = new THREE.AmbientLight(0xADADAD, 0.3);
+		var ambientLight = new THREE.AmbientLight(0xf7b9a1, 0.25);
 		scene.add(ambientLight);
 
-		var directionalLight1 = new THREE.DirectionalLight(0xEE9B31, 0.9);
-		directionalLight1.position.set(0, 1, 0);
+		var directionalLight1 = new THREE.DirectionalLight(0xEE9B31, 0.4);
+		directionalLight1.position.set(0, 0.2, -1);
+		directionalLight1.castShadow = true;
 		scene.add(directionalLight1);
 
-		var directionalLight2 = new THREE.DirectionalLight(0xFF4B2B, 0.9);
-		directionalLight2.position.set(3, 4, 0);
+		var directionalLight2 = new THREE.DirectionalLight(0xFF4B2B,0.4);
+		directionalLight2.position.set(0, 6, -10);
+		directionalLight2.castShadow = true;
 		scene.add(directionalLight2);
 
-		var directionalLight3 = new THREE.DirectionalLight(0xFFDB25, 1.5);
-		directionalLight3.position.set(0, 0.1, 10);
+		var directionalLight3 = new THREE.DirectionalLight(0xFFDB25, 0.4);
+		directionalLight3.position.set(0, 0.2, -10);
+		directionalLight3.castShadow = true;
 		scene.add(directionalLight3);
 
 		//sky
@@ -113,11 +121,31 @@
 		scene.add(sky);
 
 		//ground
-		var groundGeometry = new THREE.PlaneGeometry(500, 500);
-		var groundMaterial = new THREE.MeshLambertMaterial({ color: 0x0C4D11, side: THREE.DoubleSide, emissive: 0x000000, roughness: 0.8,
-    metalness: 0.0 });
-		var ground = new THREE.Mesh(groundGeometry, groundMaterial);
+		const loader = new THREE.TextureLoader();
+		const grassTexture = loader.load('Assets/grass_texture.jpg');
+
+		grassTexture.wrapS = THREE.RepeatWrapping;
+		grassTexture.wrapT = THREE.RepeatWrapping;
+
+		grassTexture.repeat.set(8, 8); // Slightly increase repeat to overlap
+
+		grassTexture.minFilter = THREE.LinearMipMapLinearFilter;
+		grassTexture.magFilter = THREE.LinearFilter;
+
+		const groundGeometry = new THREE.PlaneGeometry(500, 500);
+		const groundMaterial = new THREE.MeshStandardMaterial({
+			normalMap: grassTexture,
+			side: THREE.DoubleSide,
+			color: 0x88cc54,
+			roughness: 0.9,
+			metalness: 0.0,
+		});
+
+		groundMaterial.normalScale = new THREE.Vector2(2, 2);
+
+		const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 		ground.rotation.x = -Math.PI / 2;
+		//ground.receiveShadow = true;
 		scene.add(ground);
 
 		// Global variables declared first
@@ -126,7 +154,7 @@
 		const existingPositions = [];
 		const playerPosition = { x: 0, z: 0 }; // Adjust this as needed
 
-		function loadTreeModel(path, mtlFile, objFile, callback) {
+		function loadModel(path, mtlFile, objFile, callback) {
 			var mtlLoader = new MTLLoader();
 			mtlLoader.setPath(path);
 			mtlLoader.load(mtlFile, function (materials) {
@@ -141,27 +169,28 @@
 		}
 
 		// Load the initial tree models
-		loadTreeModel('Assets/', 'tree_blender_file.mtl', 'tree_blender_file.obj', function (tree) {
-			tree.name = 'tree1';
+		loadModel('Assets/', 'Tree_1.mtl', 'Tree_1.obj', function (tree) {
 			treeModels.push(tree);
-			loadTreeModel('Assets/', 'Tree_pack.mtl', 'Tree_pack.obj', function (tree) {
-				tree.name = 'tree2';
+			loadModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
 				treeModels.push(tree);
-				loadTreeModel('Assets/', 'grass1_.mtl', 'grass1_.obj', function (grass) {
-					grassModels.push(grass);
-					loadTreeModel('Assets/', 'grass2_.mtl', 'grass2_.obj', function (grass) {
+				loadModel('Assets/', 'Tree_3.mtl', 'Tree_3.obj', function (tree) {
+					treeModels.push(tree);
+					loadModel('Assets/', 'grass1_.mtl', 'grass1_.obj', function (grass) {
 						grassModels.push(grass);
-						loadTreeModel('Assets/', 'leaf_pile.mtl', 'leaf_pile.obj', function (grass) {
+						loadModel('Assets/', 'grass2_.mtl', 'grass2_.obj', function (grass) {
 							grassModels.push(grass);
-							grass.name = 'leaf pile';
-							populateScene(); // Call the function after loading all models
+							loadModel('Assets/', 'leaf_pile.mtl', 'leaf_pile.obj', function (grass) {
+								grassModels.push(grass);
+								grass.name = 'leaf pile';
+								populateScene(); // Call the function after loading all models
+							});
 						});
 					});
 				});
 			});
 		});
 
-		function addObject(models, minRadius, maxRadius, minDistance, scaleFactor = 2) {
+		function addObject(models, minRadius, maxRadius, minDistance, scaleFactor = 4) {
 			if (models.length === 0) {
 				return; // No models loaded yet
 			}
@@ -201,12 +230,8 @@
 			obj.rotation.set(0, Math.random() * Math.PI * 2, 0);
 			var scale;
 
-			if (originalObject.name === "tree2") {
-				// Specific tree model that needs a scale of 2
-				scale = 4;
-			} 
-			else if (originalObject.name === "leaf pile") {
-				scale = 3;
+			if (originalObject.name === "leaf pile") {
+				scale = 2;
 			}
 			else {
 				// Other models
@@ -224,12 +249,12 @@
 		function populateScene() {
 			// Add trees (further away)
 			for (var i = 0; i < 500; i++) {
-				addObject(treeModels, 60, 200, 10);
+				addObject(treeModels, 100, 200, 20);
 			}
 
 			// Add grass (closer)
-			for (var i = 0; i < 800; i++) {
-				addObject(grassModels, 10, 200, 2, 20);
+			for (var i = 0; i < 2000; i++) {
+				addObject(grassModels, 10, 100, 2, 20);
 			}
 		}
 
