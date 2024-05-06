@@ -68,7 +68,7 @@
 		document.body.appendChild(renderer.domElement);
 
 		// Lighting
-		var ambientLight = new THREE.AmbientLight(0xf7b9a1, 0.25);
+		var ambientLight = new THREE.AmbientLight(0xf7b9a1, 0.3);
 		scene.add(ambientLight);
 
 		var directionalLight1 = new THREE.DirectionalLight(0xEE9B31, 0.4);
@@ -149,7 +149,8 @@
 		scene.add(ground);
 
 		// Global variables declared first
-		const treeModels = [];
+		const treeModelsLarge = [];
+		const treeModelsSmall = [];
 		const grassModels = [];
 		const existingPositions = [];
 		const playerPosition = { x: 0, z: 0 }; // Adjust this as needed
@@ -169,13 +170,13 @@
 		}
 
 		// Load the initial tree models
-		loadTreeModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
+		loadModel('Assets/', 'Tree_1.mtl', 'Tree_1.obj', function (tree) {
 			tree.name = 'tree1';
-			treeModels.push(tree);
+			treeModelsSmall.push(tree);
 			loadModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
-				treeModels.push(tree);
+				treeModelsSmall.push(tree);
 				loadModel('Assets/', 'Tree_3.mtl', 'Tree_3.obj', function (tree) {
-					treeModels.push(tree);
+					treeModelsLarge.push(tree);
 					loadModel('Assets/', 'grass1_.mtl', 'grass1_.obj', function (grass) {
 						grassModels.push(grass);
 						loadModel('Assets/', 'grass2_.mtl', 'grass2_.obj', function (grass) {
@@ -201,6 +202,7 @@
 			let isPositionValid = false;
 
 			while (maxTries > 0 && !isPositionValid) {
+
 				// Random angle between 0 and 180 degrees (in radians)
 				const angle = Math.random() * Math.PI;
 				// Random radius between minRadius and maxRadius units
@@ -254,12 +256,16 @@
 		function populateScene() {
 			// Add trees (further away)
 			for (var i = 0; i < 500; i++) {
-				addObject(treeModels, 100, 200, 20);
+				addObject(treeModelsLarge, 60, 150, 10, 5);
+			}
+
+			for (var i = 0; i < 100; i++) {
+				addObject(treeModelsSmall, 60, 150, 10);
 			}
 
 			// Add grass (closer)
 			for (var i = 0; i < 2000; i++) {
-				addObject(grassModels, 10, 100, 2, 20);
+				addObject(grassModels, 10, 100, 1, 15);
 			}
 		}
 
