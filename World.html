@@ -141,7 +141,7 @@
 		}
 
 		// Load the initial tree models
-		loadTreeModel('Assets/', 'tree_blender_file.mtl', 'tree_blender_file.obj', function (tree) {
+		loadTreeModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
 			tree.name = 'tree1';
 			treeModels.push(tree);
 			loadTreeModel('Assets/', 'Tree_pack.mtl', 'Tree_pack.obj', function (tree) {
@@ -201,7 +201,7 @@
 			obj.rotation.set(0, Math.random() * Math.PI * 2, 0);
 			var scale;
 
-			if (originalObject.name === "tree2") {
+			if (originalObject.name === "tree2" || originalObject.name === "tree1") {
 				// Specific tree model that needs a scale of 2
 				scale = 4;
 			} 
