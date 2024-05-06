@@ -169,7 +169,8 @@
 		}
 
 		// Load the initial tree models
-		loadModel('Assets/', 'Tree_1.mtl', 'Tree_1.obj', function (tree) {
+		loadTreeModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
+			tree.name = 'tree1';
 			treeModels.push(tree);
 			loadModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj', function (tree) {
 				treeModels.push(tree);
@@ -230,8 +231,12 @@
 			obj.rotation.set(0, Math.random() * Math.PI * 2, 0);
 			var scale;
 
-			if (originalObject.name === "leaf pile") {
-				scale = 2;
+			if (originalObject.name === "tree2" || originalObject.name === "tree1") {
+				// Specific tree model that needs a scale of 2
+				scale = 4;
+			} 
+			else if (originalObject.name === "leaf pile") {
+				scale = 3;
 			}
 			else {
 				// Other models
