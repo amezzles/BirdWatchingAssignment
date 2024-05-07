@@ -22,7 +22,7 @@ class FirstPersonControls {
 		this.movementSpeed = 1.0;
 		this.lookSpeed = 0.005;
 
-		this.lookVertical = false;//disabled vertical look movement
+		this.lookVertical = true;//disabled vertical look movement
 		this.autoForward = false;
 
 		this.activeLook = true;
@@ -32,9 +32,9 @@ class FirstPersonControls {
 		this.heightMin = 0.0;
 		this.heightMax = 1.0;
 
-		this.constrainVertical = false;
-		this.verticalMin = 0;
-		this.verticalMax = Math.PI;
+		this.constrainVertical = true;
+		this.verticalMin = Math.PI / 1.7; //default = 0 radians (0 degrees)
+		this.verticalMax = Math.PI / 2.3; //default = Math.PI (180 degrees)
 
 		this.mouseDragOn = false;
 
