@@ -28,37 +28,45 @@ class FirstPersonControls {
         this.onKeyDown = function (event) {
             switch (event.code) {
                 case 'ArrowUp':
+                case 'KeyW':
                     this.moveUp = true;
                     break;
                 case 'ArrowDown':
+                case 'KeyS':
                     this.moveDown = true;
                     break;
                 case 'ArrowLeft':
+                case 'KeyA':
                     this.lookLeft = true;
                     break;
                 case 'ArrowRight':
+                case 'KeyD':
                     this.lookRight = true;
                     break;
             }
         };
-
+        
         this.onKeyUp = function (event) {
             switch (event.code) {
                 case 'ArrowUp':
+                case 'KeyW':
                     this.moveUp = false;
                     break;
                 case 'ArrowDown':
+                case 'KeyS':
                     this.moveDown = false;
                     break;
                 case 'ArrowLeft':
+                case 'KeyA':
                     this.lookLeft = false;
                     break;
                 case 'ArrowRight':
+                case 'KeyD':
                     this.lookRight = false;
                     break;
             }
         };
-
+        
         this.update = function () {
             return function update(delta) {
                 if (this.enabled === false) return;
