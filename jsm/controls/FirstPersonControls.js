@@ -17,6 +17,10 @@ class FirstPersonControls {
         this.lookLeft = false;
         this.lookRight = false;
 
+        this.constrainVertical = true;
+        this.verticalMin = Math.PI / 1; //default = 0 radians (0 degrees)
+        this.verticalMax = Math.PI / 2.3; //default = Math.PI (180 degrees)
+
         // private variables
         let lat = 0;
         let lon = 0;
@@ -64,9 +68,10 @@ class FirstPersonControls {
                 lon += actualLookSpeed * (this.lookRight ? 1 : 0) - actualLookSpeed * (this.lookLeft ? 1 : 0);
                 lat += actualLookSpeed * (this.moveUp ? 1 : 0) - actualLookSpeed * (this.moveDown ? 1 : 0);
 
-                lat = Math.max(-85, Math.min(85, lat));
+                // Constrain vertical angle
+                lat = MathUtils.clamp(lat, MathUtils.degToRad(90) - this.verticalMax, MathUtils.degToRad(90) - this.verticalMin);
 
-                let phi = MathUtils.degToRad(90 - lat);
+                const phi = MathUtils.degToRad(90) - lat;
                 const theta = MathUtils.degToRad(lon);
 
                 const targetPosition = this.camera.position.clone();
