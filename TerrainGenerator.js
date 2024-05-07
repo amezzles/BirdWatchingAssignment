@@ -96,7 +96,7 @@ class TerrainGenerator {
             this.addObject(this.treeModelsSmall, 60, 150, 10, 3);
         }
         for (let i = 0; i < 2000; i++) {
-            this.addObject(this.grassModels, 10, 100, 1, 15);
+            this.addObject(this.grassModels, 20, 100, 1, 15);
         }
     }
 }

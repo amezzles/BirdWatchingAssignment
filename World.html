@@ -26,6 +26,7 @@
         import { OBJLoader } from './jsm/loaders/OBJLoader.js';
         import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js';
         import TerrainGenerator from './TerrainGenerator.js';
+		import Bird from './Bird.js';
 
         var scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x8FBCD4); // Light blue background
@@ -135,15 +136,53 @@
         const terrainGenerator = new TerrainGenerator(scene);
         terrainGenerator.init();
 
+		//add and move birds
+		function getRandomPositionAndDirection() {
+			const side = Math.random() > 0.5 ? 'left' : 'right';
+			const x = side === 'left' ? -50 : 50;  // Adjust starting x based on the side
+			const y = 30;  // Start below the treeline
+			const z = 70 + Math.random() * 20;  // Ensure they start behind the treeline
+			const direction = side === 'left' ? 1 : -1;  // Rightward if starting from left, leftward if from right
+			return { x, y, z, direction };
+		}
+
+		const birds = [];
+		const spawnInterval = 3000;
+
+		setInterval(() => {
+			const { x, y, z, direction } = getRandomPositionAndDirection();
+			const newBird = new Bird('bird', x, y, z, direction, scene);
+			birds.push(newBird);
+
+			// Optional: Manage bird population
+			if (birds.length > 20) {
+				const oldBird = birds.shift();
+				oldBird.hide();
+				scene.remove(oldBird.mesh);
+			}
+		}, spawnInterval);
+
+		//controls
         const fpControls = new FirstPersonControls(camera, renderer.domElement);
         fpControls.movementSpeed = 1;
         fpControls.lookSpeed = 0.015;
 
+		//animation
         function animate() {
             requestAnimationFrame(animate);
-            fpControls.update(0.05);
-            renderer.render(scene, camera);
-        }
+
+			//animate birds
+			birds.forEach(bird => {
+				bird.move();
+				if (bird.angle > Math.PI) {  // Conditions to hide and remove birds
+					bird.hide();
+					scene.remove(bird.mesh);
+				}
+			});
+
+			renderer.render(scene, camera);
+			fpControls.update(0.05);
+		}
 
         animate();
 
