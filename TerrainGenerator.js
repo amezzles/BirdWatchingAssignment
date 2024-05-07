@@ -56,9 +56,9 @@ class TerrainGenerator {
         }
     }
 
-    addObject(models, minRadius, maxRadius, minDistance, scaleFactor) {
-        for (let tries = 0; tries < 10; tries++) {
-            const angle = Math.random() * Math.PI * 2;
+    addObject(models, minRadius, maxRadius, minDistance, baseScaleFactor) {
+        for (let tries = 0; tries < 5; tries++) {
+            const angle = Math.random() * Math.PI; // 0 to 180 degrees
             const radius = Math.random() * (maxRadius - minRadius) + minRadius;
             const posX = this.playerPosition.x + radius * Math.cos(angle);
             const posZ = this.playerPosition.z + radius * Math.sin(angle);
@@ -72,6 +72,12 @@ class TerrainGenerator {
                 const originalObject = models[randomIndex];
                 const obj = originalObject.clone();
 
+                // Apply random scale factor for trees
+                let scaleFactor = baseScaleFactor;
+                if (models === this.treeModelsLarge || models === this.treeModelsSmall) {
+                    scaleFactor = Math.random() * (4 - 3.5) + 3.5; // Random scale between 3.5 and 4
+                }
+                
                 obj.position.set(posX, 0, posZ);
                 obj.rotation.set(0, Math.random() * Math.PI * 2, 0);
                 obj.scale.set(scaleFactor, scaleFactor, scaleFactor);
@@ -83,9 +89,15 @@ class TerrainGenerator {
     }
 
     populateScene() {
-        this.addObject(this.treeModelsLarge, 60, 150, 8, 4);
-        this.addObject(this.treeModelsSmall, 60, 150, 10, 2);
-        this.addObject(this.grassModels, 10, 100, 1, 1.5);
+        for (let i = 0; i < 300; i++) {
+            this.addObject(this.treeModelsLarge, 60, 150, 8, 4);
+        }
+        for (let i = 0; i < 100; i++) {
+            this.addObject(this.treeModelsSmall, 60, 150, 10, 3);
+        }
+        for (let i = 0; i < 2000; i++) {
+            this.addObject(this.grassModels, 10, 100, 1, 15);
+        }
     }
 }
 
