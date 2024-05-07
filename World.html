@@ -50,7 +50,7 @@
 		var ratio = window.innerWidth / window.innerHeight;
 		var camera = new THREE.PerspectiveCamera(45, ratio, 0.1, 1000);
 		camera.position.set(0, 10, 0);
-		camera.lookAt(new THREE.Vector3(0, 10, 10));
+		camera.lookAt(new THREE.Vector3(0, 11, 10));
 
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -255,8 +255,8 @@
 		// Populate the scene
 		function populateScene() {
 			// Add trees (further away)
-			for (var i = 0; i < 500; i++) {
-				addObject(treeModelsLarge, 60, 150, 10, 5);
+			for (var i = 0; i < 300; i++) {
+				addObject(treeModelsLarge, 60, 150, 8, 4);
 			}
 
 			for (var i = 0; i < 100; i++) {
