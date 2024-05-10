@@ -47,15 +47,17 @@ label {
 #popup-menu {
     display: none;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
+    bottom: 10%;
+    right: 3%;
+    width: 30%;
+    height: 70%;
     padding: 20px;
-    background: white;
+    background: black;
     border: 2px solid #333;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     z-index: 1000;
+    text-align: center;
 }
 #popup-menu.show {
     display: block;
