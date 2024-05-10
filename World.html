@@ -33,7 +33,7 @@
 
     </div>
 	<button id="toggleTerrainControls">Terrain Controls</button>
-	<button id="open-menu-button" onclick="togglePopup()">Open Bird Collection</button>
+	<button id="open-menu-button">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
 	<script type="importmap">
 		{
@@ -77,32 +77,24 @@ function toggleCameraUI() {
 
 		//collections menu
 
-		function togglePopup() {
-            const menu = document.getElementById('popup-menu');
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
+		function togglePopup(show) {
+			const menu = document.getElementById('popup-menu');
+			if (menu) {
+				menu.classList.toggle('show', show);
+			}
+		}
 
         // Function to load the pop-up menu into the page
         function loadCollectionMenu() {
-            fetch('BirdCollection.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('popup-menu-container').innerHTML = data;
-                    const script = document.createElement('script');
-                    script.innerHTML = `
-                        function togglePopup() {
-                            const menu = document.getElementById('popup-menu');
-                            if (menu) {
-                                menu.classList.toggle('show');
-                            }
-                        }
-                    `;
-                    document.body.appendChild(script);
-                })
-                .catch(error => console.error('Error loading the pop-up menu:', error));
-        }
+			fetch('BirdCollection.html')
+				.then((response) => response.text())
+				.then((data) => {
+					document.getElementById('popup-menu-container').innerHTML = data;
+					// Ensure the menu starts hidden
+					togglePopup(false);
+				})
+				.catch((error) => console.error('Error loading the pop-up menu:', error));
+		}
 
         // Load the pop-up menu on page load
         document.addEventListener('DOMContentLoaded', loadCollectionMenu);
@@ -244,12 +236,22 @@ function toggleCameraUI() {
 		document.getElementById('generateTrees').addEventListener('click', generateTrees);
 		document.getElementById('clearScene').addEventListener('click', () => terrainGenerator.clearTrees());
 
-		function toggleTerrainControls() {
+		function toggleTerrainControls(show) {
 			const controls = document.getElementById('controls');
-    		controls.style.display = (controls.style.display === 'none') ? 'block' : 'none';
+			controls.style.display = show ? 'block' : 'none';
 		}
 
-		document.getElementById('toggleTerrainControls').addEventListener('click', toggleTerrainControls);
+		document.getElementById('toggleTerrainControls').addEventListener('click', () => {
+			const controls = document.getElementById('controls');
+			const isCurrentlyVisible = controls.style.display === 'block';
+			toggleTerrainControls(!isCurrentlyVisible);
+		});
+
+		document.getElementById('open-menu-button').addEventListener('click', () => {
+			const menu = document.getElementById('popup-menu');
+			const isCurrentlyVisible = menu.classList.contains('show');
+			togglePopup(!isCurrentlyVisible);
+		});
 
 		//add and move birds
 		function getRandomPositionAndDirection() {
