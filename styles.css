@@ -64,3 +64,20 @@ label {
     display: block;
     text-align: right;
 }
+
+#image {
+    opacity: 0.5; /* Adjust the value to set the desired transparency level */
+    width: 80%;
+    height: 80%;
+    z-index: 15;
+}
+
+#image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+}
+

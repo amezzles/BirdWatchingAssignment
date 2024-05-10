@@ -4,6 +4,8 @@
     <title>Bird Watching Game</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
+	<div id="image-container">
+	<img id="image" src="./jsm/images/cameraUI.png" alt="Photo" />
 <!-- 
 	<img src="./jsm/images/cameraUI.png" class="responsive" id="image" style="width: 200px; height: 150px;">
 	<button onclick="changeImage()">Take Photo</button> -->
@@ -46,6 +48,29 @@
         import TerrainGenerator from './TerrainGenerator.js';
 		import Bird from './Bird.js';
 		import Camera from './Camera.js';
+
+// Event listener for DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listener for keydown event
+    document.addEventListener('keydown', function(event) {
+        // Check if the pressed key is 'z'
+        if (event.key === 'z') {
+            // Call the function to toggle the camera UI
+            toggleCameraUI();
+        }
+    });
+});
+
+// Function to toggle the visibility of the camera UI and adjust transparency
+function toggleCameraUI() {
+    const imageContainer = document.getElementById('image-container');
+    // Toggle the display property of the image container
+    imageContainer.style.display = imageContainer.style.display === 'none' ? 'block' : 'none';
+    // Adjust opacity based on visibility
+    document.getElementById('image').style.opacity = imageContainer.style.display === 'none' ? '0' : '1';
+}
+
+
 
 		//collections menu
 
