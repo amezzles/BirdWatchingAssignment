@@ -83,8 +83,8 @@ label {
 
 #image {
     opacity: 1; /* Adjust to the desired transparency level */
-    width: 80%;   /* Adjust size as needed */
-    height: 80%;  /* Adjust size as needed */
+    width: 100%;   /* Adjust size as needed */
+    height: 100%;  /* Adjust size as needed */
     z-index: 15;
 }
 
