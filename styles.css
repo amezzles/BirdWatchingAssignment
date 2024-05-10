@@ -33,6 +33,19 @@ label {
     margin-top: 5px;
     display: block;
 }
+#toggleTerrainControls {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
 #open-menu-button {
     position: absolute;
     bottom: 20px;
@@ -48,15 +61,17 @@ label {
 #popup-menu {
     display: none;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
+    bottom: 10%;
+    right: 3%;
+    width: 30%;
+    height: 70%;
     padding: 20px;
-    background: white;
+    background: black;
     border: 2px solid #333;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    z-index: 1000;
+    text-align: center;
 }
 #popup-menu.show {
     display: block;

@@ -14,7 +14,7 @@
     <div id="info">
         <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, scroll to zoom in/out</p>
     </div>
-	<div id="controls">
+	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
         <input type="range" id="numLargeTrees" min="0" max="500" value="300">
 
@@ -30,7 +30,9 @@
         <button id="generateTrees">Generate Trees</button>
 
         <button id="clearScene">Clear Scene</button>
+
     </div>
+	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button" onclick="togglePopup()">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
 	<script type="importmap">
@@ -241,6 +243,13 @@ function toggleCameraUI() {
 
 		document.getElementById('generateTrees').addEventListener('click', generateTrees);
 		document.getElementById('clearScene').addEventListener('click', () => terrainGenerator.clearTrees());
+
+		function toggleTerrainControls() {
+			const controls = document.getElementById('controls');
+    		controls.style.display = (controls.style.display === 'none') ? 'block' : 'none';
+		}
+
+		document.getElementById('toggleTerrainControls').addEventListener('click', toggleTerrainControls);
 
 		//add and move birds
 		function getRandomPositionAndDirection() {
