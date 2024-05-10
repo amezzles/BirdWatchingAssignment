@@ -56,13 +56,6 @@
 		  }
 		}
 	  </script>
-<!-- 
-	<script type="module">
-        function changeImage() {
-            var img = document.getElementById('image');
-            img.src = "./jsm/images/photoCapture.png";
-        }
-    </script> -->
 
     <script type="module">
         import * as THREE from 'three';
@@ -71,11 +64,7 @@
         import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js';
         import TerrainGenerator from './TerrainGenerator.js';
 		import Bird from './Bird.js';
-
-		// function changeImage() {
-        //     var img = document.getElementById('image');
-        //     img.src = "./jsm/images/photoCapture.png";
-        // }
+		import Camera from './Camera.js';
 
         var scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x8FBCD4); // Light blue background
