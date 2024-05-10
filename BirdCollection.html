@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bird Collection</title>
+    <style>
+        /* Simple pop-up menu styling */
+        #popup-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 300px;
+            padding: 20px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+        #popup-menu.show {
+            display: block;
+        }
+        .close-button {
+            display: block;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="popup-menu">
+        <div class="close-button"><button onclick="togglePopup()">Close</button></div>
+        <h2>Bird Collection</h2>
+        <ul>
+            <li><a href="#sparrow">Sparrow</a></li>
+            <li><a href="#robin">Robin</a></li>
+            <li><a href="#eagle">Eagle</a></li>
+        </ul>
+    </div>
+</body>
+</html>
+
