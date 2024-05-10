@@ -75,21 +75,29 @@
 			// Adjust opacity based on visibility
 			document.getElementById('image').style.opacity = isVisible ? '1' : '0';
 
-			// Reference to buttons and menus
+			// References to controls and buttons
 			const controls = document.getElementById('controls');
 			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
 			const openMenuButton = document.getElementById('open-menu-button');
+			const popupMenu = document.getElementById('popup-menu');
 
-			// Hide or show buttons only
+			// Hide or show buttons and menus based on the camera UI state
 			if (isVisible) {
 				controls.style.display = 'none';
 				toggleTerrainButton.style.display = 'none';
 				openMenuButton.style.display = 'none';
+
+				if (popupMenu) {
+					popupMenu.classList.remove('show');
+					popupMenu.style.display = 'none';
+				}
 			} else {
 				toggleTerrainButton.style.display = 'block';
 				openMenuButton.style.display = 'block';
 			}
 		}
+
+
 
 		function initializeMenus() {
 			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
@@ -112,13 +120,14 @@
 
 
 		//collections menu
-
 		function togglePopup(show) {
 			const menu = document.getElementById('popup-menu');
 			if (menu) {
 				menu.classList.toggle('show', show);
+				menu.style.display = show ? 'block' : 'none';
 			}
 		}
+
 
         // Function to load the pop-up menu into the page
         function loadCollectionMenu() {
