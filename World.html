@@ -6,6 +6,23 @@
         body { margin: 0; overflow: hidden; font-family: Monospace; background-color: #000; color: #fff; }
         canvas { width: 100%; height: 100%; }
         #info { position: absolute; top: 10px; width: 100%; text-align: center; }
+		#controls {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        button, input[type="range"] {
+            margin: 5px;
+            padding: 5px;
+        }
+        label {
+            margin-top: 5px;
+            display: block;
+        }
     </style>
 </head>
 <!-- 
@@ -14,6 +31,23 @@
 <body>
     <div id="info">
         <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, scroll to zoom in/out</p>
+    </div>
+	<div id="controls">
+        <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
+        <input type="range" id="numLargeTrees" min="0" max="500" value="300">
+
+        <label>Spacing Between Large Trees: <span id="spacingLargeTreesLabel">8</span></label>
+        <input type="range" id="spacingLargeTrees" min="1" max="50" value="8">
+
+        <label>Number of Small Trees: <span id="numSmallTreesLabel">10</span></label>
+        <input type="range" id="numSmallTrees" min="0" max="500" value="100">
+
+        <label>Spacing Between Small Trees: <span id="spacingSmallTreesLabel">10</span></label>
+        <input type="range" id="spacingSmallTrees" min="1" max="50" value="10">
+
+        <button id="generateTrees">Generate Trees</button>
+
+        <button id="clearScene">Clear Scene</button>
     </div>
 	<script type="importmap">
 		{
@@ -36,6 +70,7 @@
         import { OBJLoader } from './jsm/loaders/OBJLoader.js';
         import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js';
         import TerrainGenerator from './TerrainGenerator.js';
+		import Bird from './Bird.js';
 
 		// function changeImage() {
         //     var img = document.getElementById('image');
@@ -150,15 +185,81 @@
         const terrainGenerator = new TerrainGenerator(scene);
         terrainGenerator.init();
 
+		// Update labels on range input change
+		function updateLabel(inputId, labelId) {
+			const input = document.getElementById(inputId);
+			const label = document.getElementById(labelId);
+			label.textContent = input.value;
+			input.addEventListener('input', () => {
+				label.textContent = input.value;
+			});
+		}
+
+		updateLabel('numLargeTrees', 'numLargeTreesLabel');
+		updateLabel('spacingLargeTrees', 'spacingLargeTreesLabel');
+		updateLabel('numSmallTrees', 'numSmallTreesLabel');
+		updateLabel('spacingSmallTrees', 'spacingSmallTreesLabel');
+
+		// Generate terrain objects
+		async function generateTrees() {
+			const numLargeTrees = parseInt(document.getElementById('numLargeTrees').value);
+			const spacingLarge = parseInt(document.getElementById('spacingLargeTrees').value);
+			const numSmallTrees = parseInt(document.getElementById('numSmallTrees').value);
+			const spacingSmall = parseInt(document.getElementById('spacingSmallTrees').value);
+
+			terrainGenerator.generateTrees(numLargeTrees, spacingLarge, numSmallTrees, spacingSmall);
+		}
+
+		document.getElementById('generateTrees').addEventListener('click', generateTrees);
+		document.getElementById('clearScene').addEventListener('click', () => terrainGenerator.clearTrees());
+
+		//add and move birds
+		function getRandomPositionAndDirection() {
+			const side = Math.random() > 0.5 ? 'left' : 'right';
+			const x = side === 'left' ? -50 : 50;  // Adjust starting x based on the side
+			const y = 30;  // Start below the treeline
+			const z = 70 + Math.random() * 20;  // Ensure they start behind the treeline
+			const direction = side === 'left' ? 1 : -1;  // Rightward if starting from left, leftward if from right
+			return { x, y, z, direction };
+		}
+
+		const birds = [];
+		const spawnInterval = 3000;
+
+		setInterval(() => {
+			const { x, y, z, direction } = getRandomPositionAndDirection();
+			const newBird = new Bird('bird', x, y, z, direction, scene);
+			birds.push(newBird);
+
+			// Optional: Manage bird population
+			if (birds.length > 20) {
+				const oldBird = birds.shift();
+				oldBird.hide();
+				scene.remove(oldBird.mesh);
+			}
+		}, spawnInterval);
+
+		//controls
         const fpControls = new FirstPersonControls(camera, renderer.domElement);
         fpControls.movementSpeed = 1;
         fpControls.lookSpeed = 4;
 
+		//animation
         function animate() {
             requestAnimationFrame(animate);
-            fpControls.update(0.05);
-            renderer.render(scene, camera);
-        }
+
+			//animate birds
+			birds.forEach(bird => {
+				bird.move();
+				if (bird.angle > Math.PI) {  // Conditions to hide and remove birds
+					bird.hide();
+					scene.remove(bird.mesh);
+				}
+			});
+
+			renderer.render(scene, camera);
+			fpControls.update(0.05);
+		}
 
         animate();
 

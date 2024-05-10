@@ -35,9 +35,11 @@ class TerrainGenerator {
             this.treeModelsSmall.push(tree1);
 
             const tree2 = await this.loadModel('Assets/', 'Tree_2.mtl', 'Tree_2.obj');
+            tree2.name = 'tree2';
             this.treeModelsSmall.push(tree2);
 
             const tree3 = await this.loadModel('Assets/', 'Tree_3.mtl', 'Tree_3.obj');
+            tree3.name = 'tree3';
             this.treeModelsLarge.push(tree3);
 
             const grass1 = await this.loadModel('Assets/', 'grass1_.mtl', 'grass1_.obj');
@@ -54,6 +56,21 @@ class TerrainGenerator {
         } catch (error) {
             console.error('Failed to load models', error);
         }
+    }
+
+    clearTrees() {
+        const treeNames = ['tree1', 'tree2', 'tree3'];
+
+        // Remove tree objects from the scene
+        for (let i = this.scene.children.length - 1; i >= 0; i--) {
+            const obj = this.scene.children[i];
+            if (treeNames.includes(obj.name)) {
+                this.scene.remove(obj);
+            }
+        }
+
+        // Clear positions associated with trees
+        this.existingPositions = [];
     }
 
     addObject(models, minRadius, maxRadius, minDistance, baseScaleFactor) {
@@ -88,6 +105,20 @@ class TerrainGenerator {
         }
     }
 
+    generateTrees(numLargeTrees, spacingLarge, numSmallTrees, spacingSmall) {
+        this.clearTrees();
+
+        for (let i = 0; i < numLargeTrees; i++) {
+            this.addObject(this.treeModelsLarge, 60, 150, spacingLarge, 4, 'tree3');
+        }
+
+        for (let i = 0; i < numSmallTrees; i++) {
+            this.addObject(this.treeModelsSmall, 60, 150, spacingSmall, 3, 'tree1/tree2');
+        }
+
+        console.log(`Generated ${numLargeTrees} large trees and ${numSmallTrees} small trees.`);
+    }
+
     populateScene() {
         for (let i = 0; i < 300; i++) {
             this.addObject(this.treeModelsLarge, 60, 150, 8, 4);
@@ -96,7 +127,7 @@ class TerrainGenerator {
             this.addObject(this.treeModelsSmall, 60, 150, 10, 3);
         }
         for (let i = 0; i < 2000; i++) {
-            this.addObject(this.grassModels, 10, 100, 1, 15);
+            this.addObject(this.grassModels, 20, 100, 1, 15);
         }
     }
 }
