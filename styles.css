@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Monospace;
+    background-color: #000;
+    color: #fff;
+}
+canvas {
+    width: 100%;
+    height: 100%;
+}
+#info {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+}
+#controls {
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+}
+button, input[type="range"] {
+    margin: 5px;
+    padding: 5px;
+}
+label {
+    margin-top: 5px;
+    display: block;
+}
+#toggleTerrainControls {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+#open-menu-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+#popup-menu {
+    display: none;
+    position: fixed;
+    bottom: 10%;
+    right: 3%;
+    width: 30%;
+    height: 70%;
+    padding: 20px;
+    background: black;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    text-align: center;
+}
+#popup-menu.show {
+    display: block;
+}
+.close-button {
+    display: block;
+    text-align: right;
+}
