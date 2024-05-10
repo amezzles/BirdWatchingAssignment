@@ -8,6 +8,7 @@ body {
 canvas {
     width: 100%;
     height: 100%;
+    z-index: 0;
 }
 #info {
     position: absolute;
@@ -42,7 +43,7 @@ label {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    z-index: 20;
+    z-index: 10;
 }
 #popup-menu {
     display: none;
@@ -55,7 +56,7 @@ label {
     border: 2px solid #333;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    z-index: 10;
 }
 #popup-menu.show {
     display: block;
@@ -66,18 +67,22 @@ label {
 }
 
 #image {
-    opacity: 0.5; /* Adjust the value to set the desired transparency level */
-    width: 80%;
-    height: 80%;
+    opacity: 1; /* Adjust to the desired transparency level */
+    width: 80%;   /* Adjust size as needed */
+    height: 80%;  /* Adjust size as needed */
     z-index: 15;
 }
 
 #image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    z-index: 15;
+    z-index: 15; /* Ensure it's above the canvas but below other UI elements */
+    pointer-events: none; /* Allow clicks to pass through */
 }
 
