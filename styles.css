@@ -32,6 +32,19 @@ label {
     margin-top: 5px;
     display: block;
 }
+#toggleTerrainControls {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
 #open-menu-button {
     position: absolute;
     bottom: 20px;

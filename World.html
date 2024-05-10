@@ -27,7 +27,10 @@
         <button id="generateTrees">Generate Trees</button>
 
         <button id="clearScene">Clear Scene</button>
+
+		<!-- <button id="toggleTerrainControls">X</button> -->
     </div>
+	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button" onclick="togglePopup()">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
 	<script type="importmap">
@@ -107,10 +110,6 @@
 		renderer.physicallyCorrectLights = true;
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		renderer.toneMappingExposure = 1.0; // Adjust as needed
-		
-		//renderer.shadowMap.enabled = true;
-		//renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
 
 		document.body.appendChild(renderer.domElement);
 
@@ -226,6 +225,17 @@
 
 		document.getElementById('generateTrees').addEventListener('click', generateTrees);
 		document.getElementById('clearScene').addEventListener('click', () => terrainGenerator.clearTrees());
+
+		function toggleTerrainControls() {
+			const controls = document.getElementById('controls');
+			if (controls.style.display === 'none' || !controls.style.display) {
+				controls.style.display = 'block';
+			} else {
+				controls.style.display = 'none';
+			}
+		}
+
+		document.getElementById('toggleTerrainControls').addEventListener('click', toggleTerrainControls);
 
 		//add and move birds
 		function getRandomPositionAndDirection() {
