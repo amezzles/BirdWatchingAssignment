@@ -11,7 +11,7 @@
     <div id="info">
         <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, scroll to zoom in/out</p>
     </div>
-	<div id="controls">
+	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
         <input type="range" id="numLargeTrees" min="0" max="500" value="300">
 
@@ -28,7 +28,6 @@
 
         <button id="clearScene">Clear Scene</button>
 
-		<!-- <button id="toggleTerrainControls">X</button> -->
     </div>
 	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button" onclick="togglePopup()">Open Bird Collection</button>
@@ -228,11 +227,7 @@
 
 		function toggleTerrainControls() {
 			const controls = document.getElementById('controls');
-			if (controls.style.display === 'none' || !controls.style.display) {
-				controls.style.display = 'block';
-			} else {
-				controls.style.display = 'none';
-			}
+    		controls.style.display = (controls.style.display === 'none') ? 'block' : 'none';
 		}
 
 		document.getElementById('toggleTerrainControls').addEventListener('click', toggleTerrainControls);
