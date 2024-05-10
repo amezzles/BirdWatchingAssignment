@@ -52,27 +52,77 @@
 		import Bird from './Bird.js';
 		import Camera from './Camera.js';
 
-// Event listener for DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', function() {
-    // Event listener for keydown event
-    document.addEventListener('keydown', function(event) {
-        // Check if the pressed key is 'z'
-        if (event.key === 'z') {
-            // Call the function to toggle the camera UI
-            toggleCameraUI();
-        }
-    });
-});
+		// Event listener for DOMContentLoaded event
+		document.addEventListener('DOMContentLoaded', function() {
+			// Event listener for keydown event
+			document.addEventListener('keydown', function (event) {
+				if (event.key === 'z') {
+					const imageContainer = document.getElementById('image-container');
+					const isCurrentlyVisible = imageContainer.style.display === 'block';
+					toggleCameraUI(!isCurrentlyVisible);
+				}
+			});
+		});
 
-// Function to toggle the visibility of the camera UI and adjust transparency
-function toggleCameraUI() {
-    const imageContainer = document.getElementById('image-container');
-    // Toggle the display property of the image container
-    imageContainer.style.display = imageContainer.style.display === 'none' ? 'block' : 'none';
-    // Adjust opacity based on visibility
-    document.getElementById('image').style.opacity = imageContainer.style.display === 'none' ? '0' : '1';
-}
+		// Function to toggle the visibility of the camera UI and adjust transparency
+		function toggleCameraUI(show) {
+			const imageContainer = document.getElementById('image-container');
+			const isVisible = show !== undefined ? show : imageContainer.style.display === 'none';
 
+			// Toggle the display property of the image container
+			imageContainer.style.display = isVisible ? 'block' : 'none';
+
+			// Adjust opacity based on visibility
+			document.getElementById('image').style.opacity = isVisible ? '1' : '0';
+
+			// Disable other menus only if the camera UI is turned on
+			const controls = document.getElementById('controls');
+			const popupMenu = document.getElementById('popup-menu');
+
+			if (isVisible) {
+				// Hide terrain controls
+				if (controls.style.display === 'block') {
+					controls.style.display = 'none';
+				}
+
+				// Hide bird collection menu
+				if (popupMenu && popupMenu.classList.contains('show')) {
+					togglePopup(false);
+				}
+
+				// Disable pointer events on both menus
+				controls.style.pointerEvents = 'none';
+				if (popupMenu) {
+					popupMenu.style.pointerEvents = 'none';
+				}
+			} else {
+				// Enable pointer events for both menus when the camera UI is off
+				controls.style.pointerEvents = 'auto';
+				if (popupMenu) {
+					popupMenu.style.pointerEvents = 'auto';
+				}
+			}
+		}
+
+
+		function initializeMenus() {
+			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
+			document.getElementById('popup-menu-container').innerHTML = `
+				<div id="popup-menu" class="popup-menu">
+					<div class="close-button"><button onclick="togglePopup(false)">Close</button></div>
+					<h2>Bird Collection</h2>
+					<ul>
+						<li><a href="#option1">Option 1</a></li>
+						<li><a href="#option2">Option 2</a></li>
+						<li><a href="#option3">Option 3</a></li>
+					</ul>
+				</div>
+			`;
+			togglePopup(false); // Ensure Bird Collection starts hidden
+			toggleCameraUI(false); // Ensure Camera UI starts hidden
+		}
+
+		initializeMenus();
 
 
 		//collections menu
