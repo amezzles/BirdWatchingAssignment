@@ -75,35 +75,21 @@
 			// Adjust opacity based on visibility
 			document.getElementById('image').style.opacity = isVisible ? '1' : '0';
 
-			// Disable other menus only if the camera UI is turned on
+			// Reference to buttons and menus
 			const controls = document.getElementById('controls');
-			const popupMenu = document.getElementById('popup-menu');
+			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
+			const openMenuButton = document.getElementById('open-menu-button');
 
+			// Hide or show buttons only
 			if (isVisible) {
-				// Hide terrain controls
-				if (controls.style.display === 'block') {
-					controls.style.display = 'none';
-				}
-
-				// Hide bird collection menu
-				if (popupMenu && popupMenu.classList.contains('show')) {
-					togglePopup(false);
-				}
-
-				// Disable pointer events on both menus
-				controls.style.pointerEvents = 'none';
-				if (popupMenu) {
-					popupMenu.style.pointerEvents = 'none';
-				}
+				controls.style.display = 'none';
+				toggleTerrainButton.style.display = 'none';
+				openMenuButton.style.display = 'none';
 			} else {
-				// Enable pointer events for both menus when the camera UI is off
-				controls.style.pointerEvents = 'auto';
-				if (popupMenu) {
-					popupMenu.style.pointerEvents = 'auto';
-				}
+				toggleTerrainButton.style.display = 'block';
+				openMenuButton.style.display = 'block';
 			}
 		}
-
 
 		function initializeMenus() {
 			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
