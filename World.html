@@ -54,7 +54,6 @@
 
 		// Event listener for DOMContentLoaded event
 		document.addEventListener('DOMContentLoaded', function() {
-			// Event listener for keydown event
 			document.addEventListener('keydown', function (event) {
 				if (event.key === 'q') {
 					const imageContainer = document.getElementById('image-container');
@@ -69,40 +68,35 @@
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
-    		if (event.key === 'e') { // Check if the pressed key is the spacebar
-        		toggleImage(); // Call the function to toggle the image
+    		if (event.key === 'e') { 
+        		toggleImage(); 
     		}
 		});
 
-		// Function to toggle the image
 		function toggleImage() {
     	const image = document.getElementById('image');
     		if (isPhotoCaptured) {
-    		    // Change back to cameraUI.png
         		image.src = './jsm/images/cameraUI.png';
     		} else {
-        		// Change to photoCapture.png
         		image.src = './jsm/images/photoCapture.png';
     		}
-    		// Toggle the state
     		isPhotoCaptured = !isPhotoCaptured;
 		}
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
-    		if (event.key === 'r') { // Zoom in when 'r' key is pressed
-        		zoomCamera(-2.5); // Pass -1 to indicate zoom in
-    		} else if (event.key === 'f') { // Zoom out when 'f' key is pressed
-        		zoomCamera(2.5); // Pass 1 to indicate zoom out
+    		if (event.key === 'r') { //zoom in
+        		zoomCamera(-2.5);
+    		} else if (event.key === 'f') { //zoom out 
+        		zoomCamera(2.5); 
     		}
 		});
 
-// Function to zoom the camera
-function zoomCamera(direction) {
-    const zoomSpeed = 1; // Adjust zoom speed as needed
-    camera.fov += direction * zoomSpeed; // Increase or decrease FOV based on direction
-    camera.updateProjectionMatrix(); // Update the camera's projection matrix
-}
+		function zoomCamera(direction) {
+    		const zoomSpeed = 1; 
+    		camera.fov += direction * zoomSpeed; //increase or decrease FOV based on direction
+    		camera.updateProjectionMatrix(); 
+		}
 
 		// Function to toggle the visibility of the camera UI and adjust transparency
 		function toggleCameraUI(show) {

@@ -74,16 +74,13 @@ class FirstPersonControls {
                 if (this.enabled === false) return;
 
                 let actualHorizontalLookSpeed = delta * this.lookSpeed * 1.3;
-                let actualVerticalLookSpeed = delta * this.lookSpeed * 0.02; // Adjust the factor as needed
+                let actualVerticalLookSpeed = delta * this.lookSpeed * 0.02; 
                 
-                // Horizontal movement
+                //horizontal movement
                 lon += actualHorizontalLookSpeed * (this.lookRight ? 1 : 0) - actualHorizontalLookSpeed * (this.lookLeft ? 1 : 0);
                 
-                // Vertical movement
+                //vertical movement
                 lat += actualVerticalLookSpeed * (this.moveUp ? 1 : 0) - actualVerticalLookSpeed * (this.moveDown ? 1 : 0);
-                
-                // Constrain vertical angle
-                //lat = MathUtils.clamp(lat, MathUtils.dewgToRad(90) - this.verticalMax, MathUtils.degToRad(90) - this.verticalMin);
 
                 const phi = MathUtils.degToRad(90) - lat;
                 const theta = MathUtils.degToRad(lon);
