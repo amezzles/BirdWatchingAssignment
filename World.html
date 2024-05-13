@@ -12,7 +12,7 @@
 	<button onclick="changeImage()">Take Photo</button> -->
 <body>
     <div id="info">
-        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, z to open the camera, space to capture a photo</p>
+        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, q to open the camera, e to capture a photo, r&f to zoom in</p>
     </div>
 	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
@@ -56,7 +56,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			// Event listener for keydown event
 			document.addEventListener('keydown', function (event) {
-				if (event.key === 'z') {
+				if (event.key === 'q') {
 					const imageContainer = document.getElementById('image-container');
 					const isCurrentlyVisible = imageContainer.style.display === 'block';
 					toggleCameraUI(!isCurrentlyVisible);
@@ -69,7 +69,7 @@
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
-    		if (event.key === ' ') { // Check if the pressed key is the spacebar
+    		if (event.key === 'e') { // Check if the pressed key is the spacebar
         		toggleImage(); // Call the function to toggle the image
     		}
 		});
