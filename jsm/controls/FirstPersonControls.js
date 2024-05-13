@@ -18,8 +18,8 @@ class FirstPersonControls {
         this.lookRight = false;
 
         this.constrainVertical = true;
-        this.verticalMin = Math.PI / 1; //default = 0 radians (0 degrees)
-        this.verticalMax = Math.PI / 2.3; //default = Math.PI (180 degrees)
+        this.verticalMin = Math.PI / 1.3; //default = 0 radians (0 degrees)
+        this.verticalMax = Math.PI / 2.4; //default = Math.PI (180 degrees)
 
         // private variables
         let lat = 0;
@@ -29,10 +29,12 @@ class FirstPersonControls {
             switch (event.code) {
                 case 'ArrowUp':
                 case 'KeyW':
+                    console.log('up pressed');
                     this.moveUp = true;
                     break;
                 case 'ArrowDown':
                 case 'KeyS':
+                    console.log('down pressed');
                     this.moveDown = true;
                     break;
                 case 'ArrowLeft':
@@ -71,13 +73,17 @@ class FirstPersonControls {
             return function update(delta) {
                 if (this.enabled === false) return;
 
-                let actualLookSpeed = delta * this.lookSpeed;
-
-                lon += actualLookSpeed * (this.lookRight ? 1 : 0) - actualLookSpeed * (this.lookLeft ? 1 : 0);
-                lat += actualLookSpeed * (this.moveUp ? 1 : 0) - actualLookSpeed * (this.moveDown ? 1 : 0);
-
+                let actualHorizontalLookSpeed = delta * this.lookSpeed * 1.3;
+                let actualVerticalLookSpeed = delta * this.lookSpeed * 0.02; // Adjust the factor as needed
+                
+                // Horizontal movement
+                lon += actualHorizontalLookSpeed * (this.lookRight ? 1 : 0) - actualHorizontalLookSpeed * (this.lookLeft ? 1 : 0);
+                
+                // Vertical movement
+                lat += actualVerticalLookSpeed * (this.moveUp ? 1 : 0) - actualVerticalLookSpeed * (this.moveDown ? 1 : 0);
+                
                 // Constrain vertical angle
-                lat = MathUtils.clamp(lat, MathUtils.degToRad(90) - this.verticalMax, MathUtils.degToRad(90) - this.verticalMin);
+                //lat = MathUtils.clamp(lat, MathUtils.dewgToRad(90) - this.verticalMax, MathUtils.degToRad(90) - this.verticalMin);
 
                 const phi = MathUtils.degToRad(90) - lat;
                 const theta = MathUtils.degToRad(lon);

@@ -4,12 +4,15 @@
     <title>Bird Watching Game</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
+	<div id="image-container">
+		<img id="image" src="./jsm/images/cameraUI.png" alt="Overlay" />
+	</div>
 <!-- 
 	<img src="./jsm/images/cameraUI.png" class="responsive" id="image" style="width: 200px; height: 150px;">
 	<button onclick="changeImage()">Take Photo</button> -->
 <body>
     <div id="info">
-        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, scroll to zoom in/out</p>
+        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, q to open the camera, e to capture a photo, r&f to zoom in</p>
     </div>
 	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
@@ -30,7 +33,7 @@
 
     </div>
 	<button id="toggleTerrainControls">Terrain Controls</button>
-	<button id="open-menu-button" onclick="togglePopup()">Open Bird Collection</button>
+	<button id="open-menu-button">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
 	<script type="importmap">
 		{
@@ -39,13 +42,6 @@
 		  }
 		}
 	  </script>
-<!-- 
-	<script type="module">
-        function changeImage() {
-            var img = document.getElementById('image');
-            img.src = "./jsm/images/photoCapture.png";
-        }
-    </script> -->
 
     <script type="module">
         import * as THREE from 'three';
@@ -54,40 +50,136 @@
         import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js';
         import TerrainGenerator from './TerrainGenerator.js';
 		import Bird from './Bird.js';
+		import Camera from './Camera.js';
 
-		// function changeImage() {
-        //     var img = document.getElementById('image');
-        //     img.src = "./jsm/images/photoCapture.png";
-        // }
+		// Event listener for DOMContentLoaded event
+		document.addEventListener('DOMContentLoaded', function() {
+			// Event listener for keydown event
+			document.addEventListener('keydown', function (event) {
+				if (event.key === 'q') {
+					const imageContainer = document.getElementById('image-container');
+					const isCurrentlyVisible = imageContainer.style.display === 'block';
+					toggleCameraUI(!isCurrentlyVisible);
+				}
+			});
+		});
+
+		// Variable to keep track of the current image state
+		let isPhotoCaptured = false;
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function (event) {
+    		if (event.key === 'e') { // Check if the pressed key is the spacebar
+        		toggleImage(); // Call the function to toggle the image
+    		}
+		});
+
+		// Function to toggle the image
+		function toggleImage() {
+    	const image = document.getElementById('image');
+    		if (isPhotoCaptured) {
+    		    // Change back to cameraUI.png
+        		image.src = './jsm/images/cameraUI.png';
+    		} else {
+        		// Change to photoCapture.png
+        		image.src = './jsm/images/photoCapture.png';
+    		}
+    		// Toggle the state
+    		isPhotoCaptured = !isPhotoCaptured;
+		}
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function (event) {
+    		if (event.key === 'r') { // Zoom in when 'r' key is pressed
+        		zoomCamera(-2.5); // Pass -1 to indicate zoom in
+    		} else if (event.key === 'f') { // Zoom out when 'f' key is pressed
+        		zoomCamera(2.5); // Pass 1 to indicate zoom out
+    		}
+		});
+
+// Function to zoom the camera
+function zoomCamera(direction) {
+    const zoomSpeed = 1; // Adjust zoom speed as needed
+    camera.fov += direction * zoomSpeed; // Increase or decrease FOV based on direction
+    camera.updateProjectionMatrix(); // Update the camera's projection matrix
+}
+
+		// Function to toggle the visibility of the camera UI and adjust transparency
+		function toggleCameraUI(show) {
+			const imageContainer = document.getElementById('image-container');
+			const isVisible = show !== undefined ? show : imageContainer.style.display === 'none';
+
+			// Toggle the display property of the image container
+			imageContainer.style.display = isVisible ? 'block' : 'none';
+
+			// Adjust opacity based on visibility
+			document.getElementById('image').style.opacity = isVisible ? '1' : '0';
+
+			// References to controls and buttons
+			const controls = document.getElementById('controls');
+			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
+			const openMenuButton = document.getElementById('open-menu-button');
+			const popupMenu = document.getElementById('popup-menu');
+
+			// Hide or show buttons and menus based on the camera UI state
+			if (isVisible) {
+				controls.style.display = 'none';
+				toggleTerrainButton.style.display = 'none';
+				openMenuButton.style.display = 'none';
+
+				if (popupMenu) {
+					popupMenu.classList.remove('show');
+					popupMenu.style.display = 'none';
+				}
+			} else {
+				toggleTerrainButton.style.display = 'block';
+				openMenuButton.style.display = 'block';
+			}
+		}
+
+
+
+		function initializeMenus() {
+			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
+			document.getElementById('popup-menu-container').innerHTML = `
+				<div id="popup-menu" class="popup-menu">
+					<div class="close-button"><button onclick="togglePopup(false)">Close</button></div>
+					<h2>Bird Collection</h2>
+					<ul>
+						<li><a href="#option1">Option 1</a></li>
+						<li><a href="#option2">Option 2</a></li>
+						<li><a href="#option3">Option 3</a></li>
+					</ul>
+				</div>
+			`;
+			togglePopup(false); // Ensure Bird Collection starts hidden
+			toggleCameraUI(false); // Ensure Camera UI starts hidden
+		}
+
+		initializeMenus();
+
 
 		//collections menu
+		function togglePopup(show) {
+			const menu = document.getElementById('popup-menu');
+			if (menu) {
+				menu.classList.toggle('show', show);
+				menu.style.display = show ? 'block' : 'none';
+			}
+		}
 
-		function togglePopup() {
-            const menu = document.getElementById('popup-menu');
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
 
         // Function to load the pop-up menu into the page
         function loadCollectionMenu() {
-            fetch('BirdCollection.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('popup-menu-container').innerHTML = data;
-                    const script = document.createElement('script');
-                    script.innerHTML = `
-                        function togglePopup() {
-                            const menu = document.getElementById('popup-menu');
-                            if (menu) {
-                                menu.classList.toggle('show');
-                            }
-                        }
-                    `;
-                    document.body.appendChild(script);
-                })
-                .catch(error => console.error('Error loading the pop-up menu:', error));
-        }
+			fetch('BirdCollection.html')
+				.then((response) => response.text())
+				.then((data) => {
+					document.getElementById('popup-menu-container').innerHTML = data;
+					// Ensure the menu starts hidden
+					togglePopup(false);
+				})
+				.catch((error) => console.error('Error loading the pop-up menu:', error));
+		}
 
         // Load the pop-up menu on page load
         document.addEventListener('DOMContentLoaded', loadCollectionMenu);
@@ -109,6 +201,10 @@
 		renderer.physicallyCorrectLights = true;
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		renderer.toneMappingExposure = 1.0; // Adjust as needed
+		
+		//renderer.shadowMap.enabled = true;
+		//renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 
 		document.body.appendChild(renderer.domElement);
 
@@ -225,12 +321,22 @@
 		document.getElementById('generateTrees').addEventListener('click', generateTrees);
 		document.getElementById('clearScene').addEventListener('click', () => terrainGenerator.clearTrees());
 
-		function toggleTerrainControls() {
+		function toggleTerrainControls(show) {
 			const controls = document.getElementById('controls');
-    		controls.style.display = (controls.style.display === 'none') ? 'block' : 'none';
+			controls.style.display = show ? 'block' : 'none';
 		}
 
-		document.getElementById('toggleTerrainControls').addEventListener('click', toggleTerrainControls);
+		document.getElementById('toggleTerrainControls').addEventListener('click', () => {
+			const controls = document.getElementById('controls');
+			const isCurrentlyVisible = controls.style.display === 'block';
+			toggleTerrainControls(!isCurrentlyVisible);
+		});
+
+		document.getElementById('open-menu-button').addEventListener('click', () => {
+			const menu = document.getElementById('popup-menu');
+			const isCurrentlyVisible = menu.classList.contains('show');
+			togglePopup(!isCurrentlyVisible);
+		});
 
 		//add and move birds
 		function getRandomPositionAndDirection() {
