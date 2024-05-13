@@ -64,6 +64,30 @@
 			});
 		});
 
+		// Variable to keep track of the current image state
+		let isPhotoCaptured = false;
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function (event) {
+    		if (event.key === ' ') { // Check if the pressed key is the spacebar
+        		toggleImage(); // Call the function to toggle the image
+    		}
+		});
+
+		// Function to toggle the image
+		function toggleImage() {
+    	const image = document.getElementById('image');
+    		if (isPhotoCaptured) {
+    		    // Change back to cameraUI.png
+        		image.src = './jsm/images/cameraUI.png';
+    		} else {
+        		// Change to photoCapture.png
+        		image.src = './jsm/images/photoCapture.png';
+    		}
+    		// Toggle the state
+    		isPhotoCaptured = !isPhotoCaptured;
+		}
+
 		// Function to toggle the visibility of the camera UI and adjust transparency
 		function toggleCameraUI(show) {
 			const imageContainer = document.getElementById('image-container');
