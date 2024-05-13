@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>bgm-list</title>
+    <style>
+        
+        #bgm-list {
+            position: fixed;
+            top: 0;
+            right: 0; 
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="bgm-list">
+        <select id="bgm-select">
+            <option value="bgm1.mp3">BGM 1</option>
+            <option value="bgm2.mp3">BGM 2</option>
+            <option value="bgm3.mp3">BGM 3</option>
+            <!-- BGM++ -->
+        </select>
+    </div>
+
+    <audio id="bgm-audio" controls loop>
+        <!-- Default BGM -->
+        <source src="bgm1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const bgmSelect = document.getElementById('bgm-select');
+        const bgmAudio = document.getElementById('bgm-audio');
+        const bgmFiles = ['bgm1.mp3', 'bgm2.mp3', 'bgm3.mp3']; 
+
+        let currentIndex = 0; // BGMindex
+
+        // select
+        bgmSelect.addEventListener('change', () => {
+            const selectedBgm = bgmSelect.value;
+            bgmAudio.src = selectedBgm;
+            bgmAudio.play(); // play
+        });
+
+        // auto change
+        bgmAudio.addEventListener('ended', () => {
+            currentIndex = (currentIndex + 1) % bgmFiles.length;
+            bgmAudio.src = bgmFiles[currentIndex];
+            bgmAudio.play();
+        });
+    </script>
+</body>
+</html>
