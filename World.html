@@ -16,16 +16,16 @@
     </div>
 	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
-        <input type="range" id="numLargeTrees" min="0" max="500" value="300">
+        <input type="range" id="numLargeTrees" min="0" max="1000" value="600">
 
         <label>Spacing Between Large Trees: <span id="spacingLargeTreesLabel">8</span></label>
-        <input type="range" id="spacingLargeTrees" min="1" max="50" value="8">
+        <input type="range" id="spacingLargeTrees" min="1" max="20" value="6">
 
         <label>Number of Small Trees: <span id="numSmallTreesLabel">10</span></label>
         <input type="range" id="numSmallTrees" min="0" max="500" value="100">
 
         <label>Spacing Between Small Trees: <span id="spacingSmallTreesLabel">10</span></label>
-        <input type="range" id="spacingSmallTrees" min="1" max="50" value="10">
+        <input type="range" id="spacingSmallTrees" min="1" max="50" value="5">
 
         <button id="generateTrees">Generate Trees</button>
 
@@ -227,6 +227,11 @@ function zoomCamera(direction) {
 		directionalLight3.castShadow = true;
 		scene.add(directionalLight3);
 
+		var directionalLight3 = new THREE.DirectionalLight(0xFFDB25, 0.2);
+		directionalLight3.position.set(0, 0.2, 10);
+		directionalLight3.castShadow = true;
+		scene.add(directionalLight3);
+
 		//sky
 		const vertexShader = `
 			varying vec3 vWorldPosition;
@@ -367,7 +372,7 @@ function zoomCamera(direction) {
 		//controls
         const fpControls = new FirstPersonControls(camera, renderer.domElement);
         fpControls.movementSpeed = 1;
-        fpControls.lookSpeed = 4;
+        fpControls.lookSpeed = 8;
 
 		//animation
         function animate() {

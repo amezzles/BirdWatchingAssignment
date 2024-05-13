@@ -75,7 +75,7 @@ class TerrainGenerator {
 
     addObject(models, minRadius, maxRadius, minDistance, baseScaleFactor) {
         for (let tries = 0; tries < 5; tries++) {
-            const angle = Math.random() * Math.PI; // 0 to 180 degrees
+            const angle = Math.random() * Math.PI * 2; // 0 to 360 degrees
             const radius = Math.random() * (maxRadius - minRadius) + minRadius;
             const posX = this.playerPosition.x + radius * Math.cos(angle);
             const posZ = this.playerPosition.z + radius * Math.sin(angle);
@@ -113,15 +113,15 @@ class TerrainGenerator {
         }
 
         for (let i = 0; i < numSmallTrees; i++) {
-            this.addObject(this.treeModelsSmall, 60, 150, spacingSmall, 3, 'tree1/tree2');
+            this.addObject(this.treeModelsSmall, 80, 150, spacingSmall, 3, 'tree1/tree2');
         }
 
         console.log(`Generated ${numLargeTrees} large trees and ${numSmallTrees} small trees.`);
     }
 
     populateScene() {
-        for (let i = 0; i < 300; i++) {
-            this.addObject(this.treeModelsLarge, 60, 150, 8, 4);
+        for (let i = 0; i < 600; i++) {
+            this.addObject(this.treeModelsLarge, 60, 150, 6, 4);
         }
         for (let i = 0; i < 100; i++) {
             this.addObject(this.treeModelsSmall, 60, 150, 10, 3);
