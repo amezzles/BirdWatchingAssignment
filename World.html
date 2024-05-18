@@ -358,7 +358,7 @@ function zoomCamera(direction) {
 		const spawnInterval = 3000;
 
 		setInterval(() => {
-			if (birds.length < 2) { // Check if there are less than 20 birds in the scene
+			if (birds.length < 3) { // Check if there are less than 20 birds in the scene
 				const { angle, radius, angularVelocity } = getRandomPositionAndDirection();
 				const newBird = new Bird('bird', angle, radius, angularVelocity, scene);
 				birds.push(newBird);
