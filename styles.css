@@ -101,6 +101,19 @@ label {
     pointer-events: none; /*allow clicks to pass through */
 }
 
+#controls-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15; /*above the canvas but below other UI elements */
+    pointer-events: none; /*allow clicks to pass through */
+}
+
 #controls-button {
     position: absolute;
     top: 1%;

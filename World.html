@@ -6,6 +6,9 @@
 </head>
 	<div id="image-container">
 		<img id="image" src="./jsm/images/cameraUI.png" alt="Overlay" />
+	</div>
+
+	<div id="controls-container">
 		<img id="controlWindow" src="./jsm/images/controlWindow.png" alt="Control Window" style="display: none;" />
 	</div>
 <!-- 
@@ -85,19 +88,6 @@
     		isPhotoCaptured = !isPhotoCaptured;
 		}
 
-		function toggleControlWindow(show) {
-    const controlImage = document.getElementById('controlWindow');
-    const isVisible = show !== undefined ? show : controlImage.style.display === 'none';
-
-    // Toggle the display property of the control window image
-    controlImage.style.display = isVisible ? 'block' : 'none';
-}
-
-// Event listener for the control button click event
-document.getElementById('controls-button').addEventListener('click', () => {
-    toggleControlWindow();
-});
-
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
     		if (event.key === 'r') { //zoom in
@@ -128,7 +118,8 @@ document.getElementById('controls-button').addEventListener('click', () => {
 			const controls = document.getElementById('controls');
 			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
 			const openMenuButton = document.getElementById('open-menu-button');
-			const controlsButton = document.getElementById('controls-button');
+			const controlButton = document.getElementById('controls-button');
+    		const controlImage = document.getElementById('controlWindow');
 			const popupMenu = document.getElementById('popup-menu');
 
 			// Hide or show buttons and menus based on the camera UI state
@@ -136,7 +127,7 @@ document.getElementById('controls-button').addEventListener('click', () => {
 				controls.style.display = 'none';
 				toggleTerrainButton.style.display = 'none';
 				openMenuButton.style.display = 'none';
-				controlsButton.style.display = 'none';
+				controlButton.style.display = 'none';
 
 				if (popupMenu) {
 					popupMenu.classList.remove('show');
@@ -349,6 +340,22 @@ document.getElementById('controls-button').addEventListener('click', () => {
 			const isCurrentlyVisible = menu.classList.contains('show');
 			togglePopup(!isCurrentlyVisible);
 		});
+
+
+			// Function to toggle the visibility of the control window
+			function toggleControlWindow(show) {
+				const controlWindow = document.getElementById('controlWindow');
+				controlWindow.style.display = show ? 'block' : 'none';
+			}
+
+			// Event listener for the control button click event
+			document.getElementById('controls-button').addEventListener('click', () => {
+				const controlWindow = document.getElementById('controlWindow');
+				const isCurrentlyVisible = controlWindow.style.display === 'block';
+				toggleControlWindow(!isCurrentlyVisible);
+			});
+
+
 
 		//add and move birds
 		function getRandomPositionAndDirection() {
