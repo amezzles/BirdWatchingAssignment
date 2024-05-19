@@ -6,6 +6,7 @@
 </head>
 	<div id="image-container">
 		<img id="image" src="./jsm/images/cameraUI.png" alt="Overlay" />
+		<img id="controlWindow" src="./jsm/images/controlWindow.png" alt="Control Window" style="display: none;" />
 	</div>
 <!-- 
 	<img src="./jsm/images/cameraUI.png" class="responsive" id="image" style="width: 200px; height: 150px;">
@@ -34,6 +35,7 @@
     </div>
 	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button">Open Bird Collection</button>
+	<button id="controls-button">Controls</button>
     <div id="popup-menu-container"></div>
 	<script type="importmap">
 		{
@@ -83,6 +85,19 @@
     		isPhotoCaptured = !isPhotoCaptured;
 		}
 
+		function toggleControlWindow(show) {
+    const controlImage = document.getElementById('controlWindow');
+    const isVisible = show !== undefined ? show : controlImage.style.display === 'none';
+
+    // Toggle the display property of the control window image
+    controlImage.style.display = isVisible ? 'block' : 'none';
+}
+
+// Event listener for the control button click event
+document.getElementById('controls-button').addEventListener('click', () => {
+    toggleControlWindow();
+});
+
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
     		if (event.key === 'r') { //zoom in
@@ -113,6 +128,7 @@
 			const controls = document.getElementById('controls');
 			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
 			const openMenuButton = document.getElementById('open-menu-button');
+			const controlsButton = document.getElementById('controls-button');
 			const popupMenu = document.getElementById('popup-menu');
 
 			// Hide or show buttons and menus based on the camera UI state
@@ -120,6 +136,7 @@
 				controls.style.display = 'none';
 				toggleTerrainButton.style.display = 'none';
 				openMenuButton.style.display = 'none';
+				controlsButton.style.display = 'none';
 
 				if (popupMenu) {
 					popupMenu.classList.remove('show');
@@ -128,6 +145,7 @@
 			} else {
 				toggleTerrainButton.style.display = 'block';
 				openMenuButton.style.display = 'block';
+				controlsButton.style.display = 'block';
 			}
 		}
 

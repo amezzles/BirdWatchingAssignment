@@ -101,3 +101,25 @@ label {
     pointer-events: none; /*allow clicks to pass through */
 }
 
+#controls-button {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+#controlWindow {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    opacity: 1; /* Adjust to the desired transparency level */
+    width: 50%;   /* Adjust size as needed */
+    height: 50%;  /* Adjust size as needed */
+    z-index: 15;
+}
