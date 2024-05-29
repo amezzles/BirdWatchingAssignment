@@ -66,6 +66,7 @@
 
 		// Variable to keep track of the current image state
 		let isPhotoCaptured = false;
+		let isCameraActive = false;
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
@@ -135,9 +136,24 @@ function zoomCamera(direction) {
 				toggleTerrainButton.style.display = 'block';
 				openMenuButton.style.display = 'block';
 			}
+
+			isCameraActive = show;
 		}
 
-
+		function capturePhoto() {
+			if (isCameraActive) {
+				let birdCaptured = false;
+				birds.forEach(bird => {
+					if (isBirdInView(bird, camera)) {
+						console.log('Bird captured:', bird.birdType);
+						birdCaptured = true;
+					}
+				});
+				if (!birdCaptured) {
+					console.log('No birds captured.');
+				}
+			}
+		}
 
 		function initializeMenus() {
 			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
@@ -373,6 +389,40 @@ function zoomCamera(direction) {
 				}
 			});
 		}, spawnInterval);
+
+		function isBirdInView(bird, camera) {
+			let birdPosition = new THREE.Vector3();
+			bird.mesh.getWorldPosition(birdPosition); // Get world position of the bird
+
+			let cameraPosition = camera.position;
+			let cameraDirection = new THREE.Vector3();
+			camera.getWorldDirection(cameraDirection); // Get the normalized direction vector of the camera
+
+			let toBird = new THREE.Vector3().subVectors(birdPosition, cameraPosition).normalize(); // Vector from camera to bird
+
+			// Calculate the angle between the camera direction and the vector to the bird
+			let angle = toBird.angleTo(cameraDirection);
+
+			// Convert angle to degrees for easier interpretation
+			let angleDegrees = THREE.Math.radToDeg(angle);
+
+			// Check if the angle is within the camera's field of view
+			let fovHalf = camera.fov / 2;
+			return angleDegrees < fovHalf;
+		}
+
+		// Usage
+		function update() {
+			requestAnimationFrame(update);
+			birds.forEach((bird) => {
+				if (isBirdInView(bird, camera)) {
+					console.log('Bird is in view:', bird.birdType);
+				}
+			});
+
+			renderer.render(scene, camera);
+		}
+
 
 		// Controls
 		const fpControls = new FirstPersonControls(camera, renderer.domElement);
