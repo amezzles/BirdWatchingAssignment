@@ -347,23 +347,10 @@
 			}
 		});
 
-// 		var cameraFilterBrightnessSlider = document.getElementById('CameraFilterBrightnessSlider');
-// cameraFilterBrightnessSlider.addEventListener('input', function () {
-//     // Normalize the slider value to a suitable range for intensity
-//     var normalizedIntensity = cameraFilterBrightnessSlider.value / 50; // Adjust the normalization factor
-//     var minIntensity = 0.1; // Set a minimum intensity value
-//     cameraFilter.intensity = Math.max(normalizedIntensity, minIntensity);
-// });
-
-
 		var cameraFilterColourPicker = document.getElementById('CameraFilterColourPicker');
 		cameraFilterColourPicker.addEventListener('input', function () {
     	cameraFilter.color.set(cameraFilterColourPicker.value);
 		});
-
-
-
-
 
 
 		//sky
