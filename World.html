@@ -7,12 +7,9 @@
 	<div id="image-container">
 		<img id="image" src="./jsm/images/cameraUI.png" alt="Overlay" />
 	</div>
-<!-- 
-	<img src="./jsm/images/cameraUI.png" class="responsive" id="image" style="width: 200px; height: 150px;">
-	<button onclick="changeImage()">Take Photo</button> -->
 <body>
     <div id="info">
-        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, q to open the camera, e to capture a photo, r&f to zoom in</p>
+        <p><br></p>
     </div>
 	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
@@ -32,6 +29,28 @@
         <button id="clearScene">Clear Scene</button>
 
     </div>
+</div>
+<div id="camera-controls" style="display: flex; flex-direction: column; align-items: center;">
+    <label><strong>Camera Controls:</strong></label>
+    <label><strong>Move:</strong><span style="color: rgb(0, 255, 0);"> WASD/ Arrow Keys</span></label>
+	<label><strong>Zoom:</strong><span style="color: rgb(0, 255, 0);"> R/F</span></label>
+    <label><strong>Open Camera:</strong><span style="color: rgb(0, 255, 0);"> Q</span></label>
+    <label><strong>Capture Photo:</strong><span style="color: rgb(0, 255, 0);"> E</span></label>
+    <div style="display: flex; align-items: center;">
+        <label><strong>Camera filter colour:</strong></label>
+        <input type="color" id="CameraFilterColourPicker" class="colorPicker" value="#ffffff" style="margin-left: 10px;">
+    </div>
+</div>
+
+<audio id="cameraShutterSound">
+	<source src="./jsm/audio/camera-shutter.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="BGM">
+	<source src="./jsm/audio/birds-chirping.mp3" type="audio/mpeg">
+</audio>
+
+
 	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
@@ -52,6 +71,13 @@
 		import Bird from './Bird.js';
 		import Camera from './Camera.js';
 
+		document.addEventListener('DOMContentLoaded', function() {
+    	const bgmAudio = document.getElementById('BGM');
+    	bgmAudio.loop = true;
+		bgmAudio.volume = 0.5;
+    	bgmAudio.play(); 
+		});
+
 		// Event listener for DOMContentLoaded event
 		document.addEventListener('DOMContentLoaded', function() {
 			// Event listener for keydown event
@@ -66,27 +92,42 @@
 
 		// Variable to keep track of the current image state
 		let isPhotoCaptured = false;
+		let isCameraActive = false;
+		let photoCaptureActive = false;
+
+		// Define bird types and their images
+		const birdTypes = {
+			bird: { captured: false, coloredSrc: 'path/to/colored_image1.png' },
+			bird2: { captured: false, coloredSrc: 'path/to/colored_image2.png' },
+			bird3: { captured: false, coloredSrc: 'path/to/colored_image3.png' }
+		};
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
-    		if (event.key === 'e') { // Check if the pressed key is the spacebar
-        		toggleImage(); // Call the function to toggle the image
+    		if (event.key === 'e') { 
+				activatePhotoCapture();
     		}
 		});
 
 		// Function to toggle the image
-		function toggleImage() {
-    	const image = document.getElementById('image');
-    		if (isPhotoCaptured) {
-    		    // Change back to cameraUI.png
-        		image.src = './jsm/images/cameraUI.png';
-    		} else {
-        		// Change to photoCapture.png
-        		image.src = './jsm/images/photoCapture.png';
-    		}
-    		// Toggle the state
-    		isPhotoCaptured = !isPhotoCaptured;
+		function toggleImage(showCapture) {
+			const image = document.getElementById('image');
+			if (showCapture) {
+				image.src = './jsm/images/photoCapture.png'; // Show capture image
+			} else {
+				image.src = './jsm/images/cameraUI.png'; // Revert to default camera UI
+			}
 		}
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function(event) {
+  		if (event.key === 'e') {
+    	const cameraShutterSound = document.getElementById('cameraShutterSound');
+    		cameraShutterSound.currentTime = 0;
+    		cameraShutterSound.play();
+
+		}
+		});
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
@@ -97,12 +138,12 @@
     		}
 		});
 
-// Function to zoom the camera
-function zoomCamera(direction) {
-    const zoomSpeed = 1; // Adjust zoom speed as needed
-    camera.fov += direction * zoomSpeed; // Increase or decrease FOV based on direction
-    camera.updateProjectionMatrix(); // Update the camera's projection matrix
-}
+		// Function to zoom the camera
+		function zoomCamera(direction) {
+			const zoomSpeed = 1; // Adjust zoom speed as needed
+			camera.fov += direction * zoomSpeed; // Increase or decrease FOV based on direction
+			camera.updateProjectionMatrix(); // Update the camera's projection matrix
+		}
 
 		// Function to toggle the visibility of the camera UI and adjust transparency
 		function toggleCameraUI(show) {
@@ -120,6 +161,7 @@ function zoomCamera(direction) {
 			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
 			const openMenuButton = document.getElementById('open-menu-button');
 			const popupMenu = document.getElementById('popup-menu');
+			const cameraControls = document.getElementById('camera-controls');
 
 			// Hide or show buttons and menus based on the camera UI state
 			if (isVisible) {
@@ -135,9 +177,60 @@ function zoomCamera(direction) {
 				toggleTerrainButton.style.display = 'block';
 				openMenuButton.style.display = 'block';
 			}
+
+			isCameraActive = show;
 		}
 
+		function activatePhotoCapture() {
+			if (!isPhotoCaptured) {
+				isPhotoCaptured = true; // Set photo capture to active
+				toggleImage(true); // Show the photo capture image
+				console.log('Photo capture activated');
 
+				// Capture the current view
+				capturePhoto();
+
+				// Set a timer to deactivate photo capture after 1000 milliseconds (1 second)
+				setTimeout(() => {
+					isPhotoCaptured = false; // Set photo capture to inactive
+					toggleImage(false); // Revert the UI back to the normal camera view
+					console.log('Photo capture deactivated');
+				}, 1000);
+			}
+		}
+
+		function toggleCaptureUI(show) {
+			const imageContainer = document.getElementById('image-container');
+			imageContainer.style.display = show ? 'block' : 'none';
+			document.getElementById('image').style.opacity = show ? '1' : '0';
+		}
+
+		function capturePhoto() {
+			if (!isCameraActive) {
+				console.log('Camera is not active.');
+				return;
+			}
+			let birdCaptured = false;
+			birds.forEach(bird => {
+				if (isBirdInView(bird, camera)) {
+					console.log('Bird captured:', bird.birdType);
+					birdCaptured = true;
+					captureBird(bird.birdType);
+				}
+			});
+			if (!birdCaptured) {
+				console.log('No birds captured.');
+			}
+		}
+
+		function captureBird(birdType) {
+        if (birdTypes[birdType] && !birdTypes[birdType].captured) {
+            birdTypes[birdType].captured = true;
+            // Update the image source to the colored image
+            document.getElementById(birdType).src = birdTypes[birdType].coloredSrc;
+            console.log(`Bird ${birdType} captured!`);
+        }
+    }
 
 		function initializeMenus() {
 			document.getElementById('controls').style.display = 'block'; // Terrain controls start open
@@ -231,6 +324,30 @@ function zoomCamera(direction) {
 		directionalLight3.position.set(0, 0.2, 10);
 		directionalLight3.castShadow = true;
 		scene.add(directionalLight3);
+
+		// Camera filter ambient light 
+		const cameraFilter = new THREE.AmbientLight(0xffa500, 0.4);
+		cameraFilter.position.set(0, 5, 0);
+		cameraFilter.visible = false; 
+		scene.add(cameraFilter);
+
+
+		function toggleCameraFilterLight() {
+			cameraFilter.visible = !cameraFilter.visible;
+		}
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'q') {
+				toggleCameraFilterLight();
+			}
+		});
+
+		var cameraFilterColourPicker = document.getElementById('CameraFilterColourPicker');
+		cameraFilterColourPicker.addEventListener('input', function () {
+    	cameraFilter.color.set(cameraFilterColourPicker.value);
+		});
+
 
 		//sky
 		const vertexShader = `
@@ -373,6 +490,40 @@ function zoomCamera(direction) {
 				}
 			});
 		}, spawnInterval);
+
+		function isBirdInView(bird, camera) {
+			let birdPosition = new THREE.Vector3();
+			bird.mesh.getWorldPosition(birdPosition); // Get world position of the bird
+
+			let cameraPosition = camera.position;
+			let cameraDirection = new THREE.Vector3();
+			camera.getWorldDirection(cameraDirection); // Get the normalized direction vector of the camera
+
+			let toBird = new THREE.Vector3().subVectors(birdPosition, cameraPosition).normalize(); // Vector from camera to bird
+
+			// Calculate the angle between the camera direction and the vector to the bird
+			let angle = toBird.angleTo(cameraDirection);
+
+			// Convert angle to degrees for easier interpretation
+			let angleDegrees = THREE.Math.radToDeg(angle);
+
+			// Check if the angle is within the camera's field of view
+			let fovHalf = camera.fov / 2;
+			return angleDegrees < fovHalf;
+		}
+
+		// Usage
+		function update() {
+			requestAnimationFrame(update);
+			birds.forEach((bird) => {
+				if (isBirdInView(bird, camera)) {
+					console.log('Bird is in view:', bird.birdType);
+				}
+			});
+
+			renderer.render(scene, camera);
+		}
+
 
 		// Controls
 		const fpControls = new FirstPersonControls(camera, renderer.domElement);
