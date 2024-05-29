@@ -48,6 +48,10 @@
 	<source src="./jsm/audio/camera-shutter.mp3" type="audio/mpeg">
 </audio>
 
+<audio id="BGM">
+	<source src="./jsm/audio/birds-chirping.mp3" type="audio/mpeg">
+</audio>
+
 
 	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button">Open Bird Collection</button>
@@ -68,6 +72,12 @@
         import TerrainGenerator from './TerrainGenerator.js';
 		import Bird from './Bird.js';
 		import Camera from './Camera.js';
+
+		document.addEventListener('DOMContentLoaded', function() {
+    	const bgmAudio = document.getElementById('BGM');
+    	bgmAudio.loop = true; // Loop the audio
+    	bgmAudio.play(); // Play the audio
+		});
 
 		// Event listener for DOMContentLoaded event
 		document.addEventListener('DOMContentLoaded', function() {
@@ -119,7 +129,6 @@
 
 		}
 		});
-
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
