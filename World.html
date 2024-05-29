@@ -93,6 +93,7 @@
 			}
 		}
 
+
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
     		if (event.key === 'r') { // Zoom in when 'r' key is pressed
@@ -131,6 +132,7 @@
 				controls.style.display = 'none';
 				toggleTerrainButton.style.display = 'none';
 				openMenuButton.style.display = 'none';
+				//setRendererResolution(isVisible ? 0.9 : 1.0);
 
 				if (popupMenu) {
 					popupMenu.classList.remove('show');
@@ -287,6 +289,25 @@
 		directionalLight3.position.set(0, 0.2, 10);
 		directionalLight3.castShadow = true;
 		scene.add(directionalLight3);
+
+		// Camera filter point light 
+		const cameraFilter = new THREE.PointLight(0xffa500, 100, 100);
+		cameraFilter.position.set(0, 10, 0);
+		cameraFilter.visible = false; 
+		scene.add(cameraFilter);
+
+
+		function toggleCameraFilterLight() {
+			cameraFilter.visible = !cameraFilter.visible;
+		}
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'q') {
+				toggleCameraFilterLight();
+			}
+		});
+
 
 		//sky
 		const vertexShader = `
