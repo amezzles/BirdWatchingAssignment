@@ -36,6 +36,7 @@
 <div id="camera-controls" style="display: flex; flex-direction: column; align-items: center;">
     <label><strong>Camera Controls:</strong></label>
     <label><strong>Move:</strong><span style="color: rgb(0, 255, 0);"> WASD/ Arrow Keys</span></label>
+	<label><strong>Zoom:</strong><span style="color: rgb(0, 255, 0);"> R/F</span></label>
     <label><strong>Open Camera:</strong><span style="color: rgb(0, 255, 0);"> Q</span></label>
     <label><strong>Capture Photo:</strong><span style="color: rgb(0, 255, 0);"> E</span></label>
     <div style="display: flex; align-items: center;">
@@ -76,6 +77,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
     	const bgmAudio = document.getElementById('BGM');
     	bgmAudio.loop = true;
+		bgmAudio.volume = 0.5;
     	bgmAudio.play(); 
 		});
 
