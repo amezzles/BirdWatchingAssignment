@@ -12,7 +12,7 @@
 	<button onclick="changeImage()">Take Photo</button> -->
 <body>
     <div id="info">
-        <p>Take photos of birds<br>Use WASD or arrow keys to move the camera, q to open the camera, e to capture a photo, r&f to zoom in</p>
+        <p><br></p>
     </div>
 	<div id="controls" style="display: block;">
         <label>Number of Large Trees: <span id="numLargeTreesLabel">10</span></label>
@@ -32,6 +32,20 @@
         <button id="clearScene">Clear Scene</button>
 
     </div>
+</div>
+<div id="camera-controls" style="display: flex; flex-direction: column; align-items: center;">
+    <label><strong>Camera Controls:</strong></label>
+    <label><strong>Move:</strong><span style="color: rgb(0, 255, 0);"> WASD/ Arrow Keys</span></label>
+    <label><strong>Open Camera:</strong><span style="color: rgb(0, 255, 0);"> Q</span></label>
+    <label><strong>Capture Photo:</strong><span style="color: rgb(0, 255, 0);"> E</span></label>
+    <div style="display: flex; align-items: center;">
+        <label><strong>Camera light colour:</strong></label>
+        <input type="color" id="CameraFilterColourPicker" class="colorPicker" value="#ffffff" style="margin-left: 10px;">
+    </div>
+</div>
+
+
+
 	<button id="toggleTerrainControls">Terrain Controls</button>
 	<button id="open-menu-button">Open Bird Collection</button>
     <div id="popup-menu-container"></div>
@@ -126,6 +140,7 @@
 			const toggleTerrainButton = document.getElementById('toggleTerrainControls');
 			const openMenuButton = document.getElementById('open-menu-button');
 			const popupMenu = document.getElementById('popup-menu');
+			const cameraControls = document.getElementById('camera-controls');
 
 			// Hide or show buttons and menus based on the camera UI state
 			if (isVisible) {
@@ -291,8 +306,8 @@
 		scene.add(directionalLight3);
 
 		// Camera filter point light 
-		const cameraFilter = new THREE.PointLight(0xffa500, 100, 100);
-		cameraFilter.position.set(0, 10, 0);
+		const cameraFilter = new THREE.PointLight(0xffa500, 110, 100);
+		cameraFilter.position.set(0, 5, 0);
 		cameraFilter.visible = false; 
 		scene.add(cameraFilter);
 
@@ -307,6 +322,24 @@
 				toggleCameraFilterLight();
 			}
 		});
+
+// 		var cameraFilterBrightnessSlider = document.getElementById('CameraFilterBrightnessSlider');
+// cameraFilterBrightnessSlider.addEventListener('input', function () {
+//     // Normalize the slider value to a suitable range for intensity
+//     var normalizedIntensity = cameraFilterBrightnessSlider.value / 50; // Adjust the normalization factor
+//     var minIntensity = 0.1; // Set a minimum intensity value
+//     cameraFilter.intensity = Math.max(normalizedIntensity, minIntensity);
+// });
+
+
+		var cameraFilterColourPicker = document.getElementById('CameraFilterColourPicker');
+		cameraFilterColourPicker.addEventListener('input', function () {
+    	cameraFilter.color.set(cameraFilterColourPicker.value);
+		});
+
+
+
+
 
 
 		//sky
