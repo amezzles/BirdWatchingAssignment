@@ -17,10 +17,4 @@ export default class Camera {
         }
     }
 
-    // Function to change the image
-    changeImage() {
-        var img = document.getElementById('image');
-        img.src = "./jsm/images/photoCapture.png";
-    }
-
 }
