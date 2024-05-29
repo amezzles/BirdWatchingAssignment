@@ -67,11 +67,12 @@
 		// Variable to keep track of the current image state
 		let isPhotoCaptured = false;
 		let isCameraActive = false;
+		let photoCaptureActive = false;
 
 		// Event listener for keydown event
 		document.addEventListener('keydown', function (event) {
-    		if (event.key === 'e') { // Check if the pressed key is the spacebar
-        		toggleImage(); // Call the function to toggle the image
+    		if (event.key === 'e') { 
+				activatePhotoCapture();
     		}
 		});
 
@@ -140,18 +141,36 @@ function zoomCamera(direction) {
 			isCameraActive = show;
 		}
 
+		function activatePhotoCapture() {
+			if (!photoCaptureActive) {
+				photoCaptureActive = true;
+				console.log('Photo capture activated');
+
+				// Capture the current view immediately
+				capturePhoto();
+
+				// Set a timer to deactivate photo capture after 2000 milliseconds (2 seconds)
+				setTimeout(() => {
+					photoCaptureActive = false;
+					console.log('Photo capture deactivated');
+				}, 2000);
+			}
+		}
+
 		function capturePhoto() {
-			if (isCameraActive) {
-				let birdCaptured = false;
-				birds.forEach(bird => {
-					if (isBirdInView(bird, camera)) {
-						console.log('Bird captured:', bird.birdType);
-						birdCaptured = true;
-					}
-				});
-				if (!birdCaptured) {
-					console.log('No birds captured.');
+			if (!isCameraActive) {
+				console.log('Camera is not active.');
+				return;
+			}
+			let birdCaptured = false;
+			birds.forEach(bird => {
+				if (isBirdInView(bird, camera)) {
+					console.log('Bird captured:', bird.birdType);
+					birdCaptured = true;
 				}
+			});
+			if (!birdCaptured) {
+				console.log('No birds captured.');
 			}
 		}
 
