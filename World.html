@@ -39,7 +39,7 @@
     <label><strong>Open Camera:</strong><span style="color: rgb(0, 255, 0);"> Q</span></label>
     <label><strong>Capture Photo:</strong><span style="color: rgb(0, 255, 0);"> E</span></label>
     <div style="display: flex; align-items: center;">
-        <label><strong>Camera light colour:</strong></label>
+        <label><strong>Camera filter colour:</strong></label>
         <input type="color" id="CameraFilterColourPicker" class="colorPicker" value="#ffffff" style="margin-left: 10px;">
     </div>
 </div>
@@ -75,8 +75,8 @@
 
 		document.addEventListener('DOMContentLoaded', function() {
     	const bgmAudio = document.getElementById('BGM');
-    	bgmAudio.loop = true; // Loop the audio
-    	bgmAudio.play(); // Play the audio
+    	bgmAudio.loop = true;
+    	bgmAudio.play(); 
 		});
 
 		// Event listener for DOMContentLoaded event
@@ -327,8 +327,8 @@
 		directionalLight3.castShadow = true;
 		scene.add(directionalLight3);
 
-		// Camera filter point light 
-		const cameraFilter = new THREE.AmbientLight(0xffa500, 1);
+		// Camera filter ambient light 
+		const cameraFilter = new THREE.AmbientLight(0xffa500, 0.4);
 		cameraFilter.position.set(0, 5, 0);
 		cameraFilter.visible = false; 
 		scene.add(cameraFilter);
