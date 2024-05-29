@@ -77,17 +77,13 @@
 		});
 
 		// Function to toggle the image
-		function toggleImage() {
-    	const image = document.getElementById('image');
-    		if (isPhotoCaptured) {
-    		    // Change back to cameraUI.png
-        		image.src = './jsm/images/cameraUI.png';
-    		} else {
-        		// Change to photoCapture.png
-        		image.src = './jsm/images/photoCapture.png';
-    		}
-    		// Toggle the state
-    		isPhotoCaptured = !isPhotoCaptured;
+		function toggleImage(showCapture) {
+			const image = document.getElementById('image');
+			if (showCapture) {
+				image.src = './jsm/images/photoCapture.png'; // Show capture image
+			} else {
+				image.src = './jsm/images/cameraUI.png'; // Revert to default camera UI
+			}
 		}
 
 		// Event listener for keydown event
@@ -142,19 +138,27 @@ function zoomCamera(direction) {
 		}
 
 		function activatePhotoCapture() {
-			if (!photoCaptureActive) {
-				photoCaptureActive = true;
+			if (!isPhotoCaptured) {
+				isPhotoCaptured = true; // Set photo capture to active
+				toggleImage(true); // Show the photo capture image
 				console.log('Photo capture activated');
 
-				// Capture the current view immediately
+				// Capture the current view
 				capturePhoto();
 
 				// Set a timer to deactivate photo capture after 2000 milliseconds (2 seconds)
 				setTimeout(() => {
-					photoCaptureActive = false;
+					isPhotoCaptured = false; // Set photo capture to inactive
+					toggleImage(false); // Revert the UI back to the normal camera view
 					console.log('Photo capture deactivated');
 				}, 2000);
 			}
+		}
+
+		function toggleCaptureUI(show) {
+			const imageContainer = document.getElementById('image-container');
+			imageContainer.style.display = show ? 'block' : 'none';
+			document.getElementById('image').style.opacity = show ? '1' : '0';
 		}
 
 		function capturePhoto() {
