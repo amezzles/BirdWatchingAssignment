@@ -45,7 +45,7 @@
 </div>
 
 <audio id="cameraShutterSound">
-	<source src="path/to/camera-shutter.mp3" type="audio/mpeg">
+	<source src="./jsm/audio/camera-shutter.mp3" type="audio/mpeg">
 </audio>
 
 
@@ -109,6 +109,16 @@
 				image.src = './jsm/images/cameraUI.png'; // Revert to default camera UI
 			}
 		}
+
+		// Event listener for keydown event
+		document.addEventListener('keydown', function(event) {
+  		if (event.key === 'e') {
+    	const cameraShutterSound = document.getElementById('cameraShutterSound');
+    		cameraShutterSound.currentTime = 0;
+    		cameraShutterSound.play();
+
+		}
+		});
 
 
 		// Event listener for keydown event
